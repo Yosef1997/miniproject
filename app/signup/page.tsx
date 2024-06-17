@@ -114,7 +114,7 @@ const page = () => {
           )
         }}
       </Formik>
-      <p className='text-label font-semibold mt-8'>
+      <p className='text-label text-center font-semibold mt-8'>
         Do you already have an account?{" "}
         <span>
           <Link href={"/signin"} className='text-primary underline'>

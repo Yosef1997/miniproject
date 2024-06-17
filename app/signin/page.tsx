@@ -97,7 +97,7 @@ const page = () => {
           )
         }}
       </Formik>
-      <p className='text-label font-semibold mt-8'>
+      <p className='text-label text-center font-semibold mt-8'>
         Forgot your password?{" "}
         <span>
           <Link href={"/forgotpassword"} className='text-primary underline'>
