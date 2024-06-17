@@ -84,34 +84,36 @@ const Navbar = () => {
         />
       </div>
       {showBurger ? (
-        <div className='flex flex-col'>
-          <div className='pt-4 pb-10 px-6 border-b border-border-line'>
-            <div className='flex items-center px-4 py-3.5 border border-border-line rounded-md'>
-              <AiOutlineSearch size={25} />
-              <input
-                onChange={(e) => debounced(e.target.value)}
-                onBlur={() => setSearch(false)}
-                className='px-4 py-[6px] text-sm rounded-xl w-full focus:outline-none'
-                type='text'
-                placeholder='Search...'
-              />
-            </div>
-          </div>
-          {nav.map((e, i) => {
-            return (
-              <div key={i}>
-                <Link
-                  className='flex text-title justify-center items-center py-4 border-b border-border-line'
-                  href={e.path}
-                >
-                  {e.name}
-                </Link>
+        <div className='flex flex-col absolute left-0 right-0 bg-black bg-opacity-30 min-h-screen'>
+          <div className='bg-white'>
+            <div className='pt-4 pb-10 px-6 border-b border-border-line'>
+              <div className='flex items-center px-4 py-3.5 border border-border-line rounded-md'>
+                <AiOutlineSearch size={25} />
+                <input
+                  onChange={(e) => debounced(e.target.value)}
+                  onBlur={() => setSearch(false)}
+                  className='px-4 py-[6px] text-sm rounded-xl w-full focus:outline-none'
+                  type='text'
+                  placeholder='Search...'
+                />
               </div>
-            )
-          })}
-          <p className='text-center text-label text-[13px] pt-14 pb-8 '>
-            © 2020 Tickitz. All Rights Reserved.
-          </p>
+            </div>
+            {nav.map((e, i) => {
+              return (
+                <div key={i}>
+                  <Link
+                    className='flex text-title justify-center items-center py-4 border-b border-border-line'
+                    href={e.path}
+                  >
+                    {e.name}
+                  </Link>
+                </div>
+              )
+            })}
+            <p className='text-center text-label text-[13px] pt-14 pb-8 '>
+              © 2020 Tickitz. All Rights Reserved.
+            </p>
+          </div>
         </div>
       ) : null}
     </div>

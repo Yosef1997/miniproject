@@ -11,6 +11,7 @@ const config: Config = {
       primary: "#5F2EEA",
       "primary-dark": "#9570FE",
       white: "#FFFFFF",
+      black: "#000000",
       "border-line": "#DEDEDE",
       placeholder: "#A0A3BD",
       title: "#14142B",
