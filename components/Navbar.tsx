@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from "react"
-import { BiChevronRight } from "react-icons/bi"
 import { CgMenuRightAlt } from "react-icons/cg"
 import { AiOutlineSearch } from "react-icons/ai"
 import Link from "next/link"
@@ -31,40 +30,49 @@ const Navbar = () => {
   const debounced = useDebouncedCallback(
     (value) => {
       // logic for search or hit api search
+      setSearch(false)
     },
     // delay in ms (1s)
     1000
   )
 
   return (
-    <div className='sticky top-0 z-50'>
+    <div className='sticky top-0 z-50 bg-white'>
       <div className='hidden items-center justify-between px-32 py-7 w-full md:flex'>
         <div className='flex gap-x-14 items-center'>
           <Image className='' src={Tickitz} alt='tickitz' />
           {nav.map((e, i) => {
             return (
-              <Link className='font-semibold' key={i} href={e.path}>
+              <Link className='font-semibold text-title' key={i} href={e.path}>
                 {e.name}
               </Link>
             )
           })}
         </div>
-        <div className='flex items-center px-4 py-3.5 border border-black rounded-md'>
-          <AiOutlineSearch size={25} />
-          <input
-            onChange={(e) => debounced(e.target.value)}
-            onBlur={() => setSearch(false)}
-            className='px-4 py-[6px] text-sm rounded-xl w-full focus:outline-none'
-            type='text'
-            placeholder='Search...'
-          />
+        <div className='flex gap-x-12'>
+          <div
+            className={`flex items-center px-4 py-3 ${
+              isSearch ? "border" : ""
+            } border-black rounded-md`}
+          >
+            <AiOutlineSearch size={25} onClick={() => setSearch(!isSearch)} />
+            {isSearch ? (
+              <input
+                onChange={(e) => debounced(e.target.value)}
+                onBlur={() => setSearch(false)}
+                className='px-4 text-sm rounded-xl w-full focus:outline-none'
+                type='text'
+                placeholder='Search...'
+              />
+            ) : null}
+          </div>
+          <button
+            type='button'
+            className='bg-primary px-7 py-3.5 rounded-md text-white-btn'
+          >
+            Login
+          </button>
         </div>
-        <button
-          type='button'
-          className='bg-primary px-7 py-3.5 rounded-md text-white-btn'
-        >
-          Login
-        </button>
       </div>
 
       <div className='flex items-center justify-between px-6 py-7 w-full'>
@@ -77,8 +85,8 @@ const Navbar = () => {
       </div>
       {showBurger ? (
         <div className='flex flex-col'>
-          <div className='pt-4 pb-10 px-6 border-b border-black'>
-            <div className='flex items-center px-4 py-3.5 border border-black rounded-md'>
+          <div className='pt-4 pb-10 px-6 border-b border-border-line'>
+            <div className='flex items-center px-4 py-3.5 border border-border-line rounded-md'>
               <AiOutlineSearch size={25} />
               <input
                 onChange={(e) => debounced(e.target.value)}
@@ -93,7 +101,7 @@ const Navbar = () => {
             return (
               <div key={i}>
                 <Link
-                  className='flex justify-center items-center py-4 border-b border-black'
+                  className='flex text-title justify-center items-center py-4 border-b border-border-line'
                   href={e.path}
                 >
                   {e.name}
@@ -101,6 +109,9 @@ const Navbar = () => {
               </div>
             )
           })}
+          <p className='text-center text-label text-[13px] pt-14 pb-8 '>
+            © 2020 Tickitz. All Rights Reserved.
+          </p>
         </div>
       ) : null}
     </div>
