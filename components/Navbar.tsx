@@ -74,7 +74,7 @@ const Navbar = () => {
             type='button'
             className='bg-primary px-7 py-3.5 rounded-md text-white-btn'
           >
-            Sign in
+            <Link href={"/signin"}> Sign in</Link>
           </button>
         </div>
       </div>
@@ -116,7 +116,7 @@ const Navbar = () => {
             })}
             <Link
               className='flex text-title justify-center items-center py-4 border-b border-border-line'
-              href={"#"}
+              href={"/signin"}
             >
               Sign in
             </Link>
