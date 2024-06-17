@@ -117,7 +117,7 @@ const page = () => {
       <p className='text-label font-semibold mt-8'>
         Do you already have an account?{" "}
         <span>
-          <Link href={"/forgotpassword"} className='text-primary underline'>
+          <Link href={"/signin"} className='text-primary underline'>
             Log in
           </Link>
         </span>
