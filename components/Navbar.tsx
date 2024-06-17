@@ -18,8 +18,12 @@ const nav = [
     path: "/events",
   },
   {
-    name: "About",
-    path: "/about",
+    name: "Organizers",
+    path: "/organizers",
+  },
+  {
+    name: "Locations",
+    path: "/locations",
   },
 ]
 
@@ -70,7 +74,7 @@ const Navbar = () => {
             type='button'
             className='bg-primary px-7 py-3.5 rounded-md text-white-btn'
           >
-            Login
+            Sign in
           </button>
         </div>
       </div>
@@ -110,6 +114,12 @@ const Navbar = () => {
                 </div>
               )
             })}
+            <Link
+              className='flex text-title justify-center items-center py-4 border-b border-border-line'
+              href={"#"}
+            >
+              Sign in
+            </Link>
             <p className='text-center text-label text-[13px] pt-14 pb-8 '>
               © 2020 Tickitz. All Rights Reserved.
             </p>
