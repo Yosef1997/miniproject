@@ -74,7 +74,7 @@ const Navbar = () => {
             type='button'
             className='bg-primary px-7 py-3.5 rounded-md text-white-btn'
           >
-            <Link href={"/signin"}> Sign in</Link>
+            <Link href={"/signup"}> Sign Up</Link>
           </button>
         </div>
       </div>
@@ -116,9 +116,9 @@ const Navbar = () => {
             })}
             <Link
               className='flex text-title justify-center items-center py-4 border-b border-border-line'
-              href={"/signin"}
+              href={"/signup"}
             >
-              Sign in
+              Sign Up
             </Link>
             <p className='text-center text-label text-[13px] pt-14 pb-8 '>
               © 2020 Tickitz. All Rights Reserved.
