@@ -27,12 +27,18 @@ const signupSchema = yup.object().shape({
 interface signupValues {
   email: string
   password: string
+  role: string
   referral: string
 }
 
 const page = () => {
   const [isShow, setIsShow] = useState(false)
-  const initialValues: signupValues = { email: "", password: "", referral: "" }
+  const initialValues: signupValues = {
+    email: "",
+    password: "",
+    role: "customer",
+    referral: "",
+  }
 
   return (
     <div className='lg:grid lg:grid-cols-3 min-h-screen'>
@@ -47,7 +53,7 @@ const page = () => {
           your details are required.
         </p>
       </div>
-      <div className='px-6 my-12 lg:px-14 lg:my-auto'>
+      <div className='px-6 my-12 lg:px-14 lg:mt-20'>
         <Image className='lg:hidden' src={Tickitz} alt='Tickitz-mobile' />
         <h2 className='text-title text-2xl py-10 lg:hidden'>Sign Up</h2>
         <h2 className='text-title text-2xl mb-11 max-lg:hidden'>
@@ -106,22 +112,42 @@ const page = () => {
                     </div>
                   ) : null}
                 </div>
-                <div className='flex flex-col mb-10'>
-                  <label htmlFor='referral'>Referral</label>
-                  <Field
-                    className='px-6 py-5 mt-3 rounded-md border border-border-line focus:outline-none'
-                    type='text'
-                    name='referral'
-                    onChange={handleChange}
-                    value={values.referral}
-                    placeholder='Write your referral(optinal)'
-                  />
-                  {touched.referral && errors.referral ? (
-                    <div className='text-error text-sm mt-1'>
-                      {errors.referral}
-                    </div>
-                  ) : null}
+                <div
+                  className={`flex flex-col ${
+                    values.role === "customer" ? "mb-6" : "mb-10"
+                  }`}
+                >
+                  <label htmlFor='role'>Sign up as</label>
+                  <div className='px-6 py-5 mt-3 rounded-md border border-border-line '>
+                    <Field
+                      as='select'
+                      name='role'
+                      className='focus:outline-none w-full'
+                    >
+                      <option value='customer'>Customer</option>
+                      <option value='event organizer'>Event organizer</option>
+                    </Field>
+                  </div>
                 </div>
+                {values.role === "customer" ? (
+                  <div className='flex flex-col mb-10'>
+                    <label htmlFor='referral'>Referral</label>
+                    <Field
+                      className='px-6 py-5 mt-3 rounded-md border border-border-line focus:outline-none'
+                      type='text'
+                      name='referral'
+                      onChange={handleChange}
+                      value={values.referral}
+                      placeholder='Write your referral(optinal)'
+                    />
+                    {touched.referral && errors.referral ? (
+                      <div className='text-error text-sm mt-1'>
+                        {errors.referral}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
+
                 <button
                   className='bg-primary text-white font-bold w-full py-6 rounded-md'
                   type='submit'
