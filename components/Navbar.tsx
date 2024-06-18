@@ -42,7 +42,7 @@ const Navbar = () => {
 
   return (
     <div className='sticky top-0 z-50 bg-white'>
-      <div className='hidden items-center justify-between px-32 py-7 w-full md:flex'>
+      <div className='hidden items-center justify-between px-32 py-7 w-full lg:flex'>
         <div className='flex gap-x-14 items-center'>
           <Image className='' src={Tickitz} alt='tickitz' />
           {nav.map((e, i) => {
@@ -72,7 +72,7 @@ const Navbar = () => {
           </div>
           <button
             type='button'
-            className='bg-primary px-7 py-3.5 rounded-md text-white-btn'
+            className='bg-primary px-7 py-3.5 rounded-md text-white-btn font-bold'
           >
             <Link href={"/signup"}> Sign Up</Link>
           </button>
@@ -80,11 +80,11 @@ const Navbar = () => {
       </div>
 
       <div className='flex items-center justify-between px-6 py-7 w-full'>
-        <Image className='md:hidden' src={TickitzMobile} alt='tickitz-mobile' />
+        <Image className='lg:hidden' src={TickitzMobile} alt='tickitz-mobile' />
         <CgMenuRightAlt
           onClick={() => setShowBurger(!showBurger)}
           size={25}
-          className='block md:hidden'
+          className='block lg:hidden'
         />
       </div>
       {showBurger ? (

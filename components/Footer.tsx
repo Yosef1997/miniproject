@@ -13,24 +13,24 @@ import Spark from "@/public/spark.svg"
 
 const Footer = () => {
   return (
-    <div className='px-6 md:px-32'>
-      <div className='md:grid md:grid-cols-4'>
+    <div className='px-6 lg:px-32'>
+      <div className='lg:grid lg:grid-cols-4'>
         <div className='mb-5'>
           <Image
-            className='md:hidden'
+            className='lg:hidden'
             src={TickitzMobile}
             alt='tickitz-mobile'
           />
-          <Image className='max-md:hidden' src={Tickitz} alt='tickitz' />
+          <Image className='max-lg:hidden' src={Tickitz} alt='tickitz' />
 
-          <p className='text-label text-sm mt-3 md:text-base'>
+          <p className='text-label text-sm mt-3 lg:text-base'>
             Stop waiting in line. Buy tickets conveniently, watch events
             quietly.
           </p>
         </div>
-        <div className='mb-12 md:pl-20'>
+        <div className='mb-12 lg:pl-20'>
           <h2 className='font-semibold mb-3'>Explore</h2>
-          <div className='flex gap-x-10 gap-y-3 flex-wrap text-label md:text-body md:flex-col'>
+          <div className='flex gap-x-10 gap-y-3 flex-wrap text-label lg:text-body lg:flex-col'>
             <Link href={"#"}>Events</Link>
             <Link href={"#"}>Organizers</Link>
             <Link href={"#"}>Locations</Link>
@@ -47,14 +47,14 @@ const Footer = () => {
         </div>
         <div>
           <h2 className='font-semibold mb-3'>Follow us</h2>
-          <div className='flex items-start gap-x-8 text-sm text-label md:flex-col md:gap-y-6'>
+          <div className='flex items-start gap-x-8 text-sm text-label lg:flex-col lg:gap-y-6'>
             <button
               type='button'
               title='Tickitz Events id'
               className='flex items-center gap-x-4'
             >
               <FiFacebook size={24} />
-              <span className='hidden md:inline'>Tickitz Event id</span>
+              <span className='hidden lg:inline'>Tickitz Event id</span>
             </button>
             <button
               type='button'
@@ -62,7 +62,7 @@ const Footer = () => {
               className='flex items-center gap-x-4'
             >
               <FaInstagram size={24} />
-              <span className='hidden md:inline'>tickitz.id</span>
+              <span className='hidden lg:inline'>tickitz.id</span>
             </button>
             <button
               type='button'
@@ -70,7 +70,7 @@ const Footer = () => {
               className='flex items-center gap-x-4'
             >
               <RiTwitterLine size={24} />
-              <span className='hidden md:inline'>tickitz.id</span>
+              <span className='hidden lg:inline'>tickitz.id</span>
             </button>
             <button
               type='button'
@@ -78,7 +78,7 @@ const Footer = () => {
               className='flex items-center gap-x-4'
             >
               <FiYoutube size={24} />
-              <span className='hidden md:inline'>Tickitz Event id</span>
+              <span className='hidden lg:inline'>Tickitz Event id</span>
             </button>
           </div>
         </div>
