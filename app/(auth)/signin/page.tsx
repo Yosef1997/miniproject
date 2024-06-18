@@ -39,9 +39,9 @@ const page = () => {
         <Image src={TickitzWhite} width={500} alt='Tickitz-white' />
         <h2 className='text-white text-5xl'>wait, watch, wow!</h2>
       </div>
-      <div className='px-6 my-12 lg:px-14 lg:my-auto'>
+      <div className='px-6 my-12 lg:px-14 lg:mt-12 xl:my-auto'>
         <Image className='lg:hidden' src={Tickitz} alt='Tickitz-mobile' />
-        <h2 className='text-title text-2xl md:text-5xl py-10 lg:py-0'>
+        <h2 className='text-title text-2xl lg:text-5xl py-10 lg:py-0'>
           Sign In
         </h2>
         <p className='text-lg text-placeholder mt-3 mb-12 hidden lg:block'>
