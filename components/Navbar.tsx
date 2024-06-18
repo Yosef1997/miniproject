@@ -42,7 +42,7 @@ const Navbar = () => {
 
   return (
     <div className='sticky top-0 z-50 bg-white'>
-      <div className='hidden items-center justify-between px-32 py-7 w-full lg:flex'>
+      <div className='hidden items-center justify-between px-16 py-7 w-full xl:px-32 lg:flex'>
         <div className='flex gap-x-14 items-center'>
           <Image className='' src={Tickitz} alt='tickitz' />
           {nav.map((e, i) => {
