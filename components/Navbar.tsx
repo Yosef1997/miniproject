@@ -79,13 +79,9 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className='flex items-center justify-between px-6 py-7 w-full'>
-        <Image className='lg:hidden' src={TickitzMobile} alt='tickitz-mobile' />
-        <CgMenuRightAlt
-          onClick={() => setShowBurger(!showBurger)}
-          size={25}
-          className='block lg:hidden'
-        />
+      <div className='flex lg:hidden items-center justify-between px-6 py-7 w-full'>
+        <Image src={TickitzMobile} alt='tickitz-mobile' />
+        <CgMenuRightAlt onClick={() => setShowBurger(!showBurger)} size={25} />
       </div>
       {showBurger ? (
         <div className='flex flex-col absolute left-0 right-0 bg-black bg-opacity-30 min-h-screen'>
