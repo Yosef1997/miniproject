@@ -76,7 +76,9 @@ const page = () => {
               </div>
             </>
           ) : (
-            <OrderHistory />
+            <div className='lg:mt-12'>
+              <OrderHistory />
+            </div>
           )}
         </div>
       </div>

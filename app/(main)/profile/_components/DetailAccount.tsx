@@ -1,14 +1,8 @@
-import { MdAccountCircle } from "react-icons/md"
-import { BiDotsHorizontalRounded } from "react-icons/bi"
 import { Field, Form, Formik, FormikProps } from "formik"
 import React, { useState } from "react"
 import * as yup from "yup"
 import { IoIosEye } from "react-icons/io"
 import { IoIosEyeOff } from "react-icons/io"
-import Image from "next/image"
-import LoyaltyCard from "@/public/loyalty-card.svg"
-import OrderHistory from "./OrderHistory"
-import ProfileImage from "./ProfileImage"
 
 const detailAccountSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
