@@ -7,6 +7,8 @@ import { IoIosEye } from "react-icons/io"
 import { IoIosEyeOff } from "react-icons/io"
 import Image from "next/image"
 import LoyaltyCard from "@/public/loyalty-card.svg"
+import OrderHistory from "./OrderHistory"
+import ProfileImage from "./ProfileImage"
 
 const detailAccountSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
@@ -47,6 +49,8 @@ interface detailAccountValues {
 const DetailAccount = () => {
   const [isShow, setIsShow] = useState(false)
   const [isShowConfirm, setIsShowConfirm] = useState(false)
+  const [tab, setTab] = useState<number>(1)
+
   const initialValues: detailAccountValues = {
     fullName: "Jonny Doe",
     email: "",
@@ -55,79 +59,43 @@ const DetailAccount = () => {
     confirmPassword: "",
   }
   return (
-    <div className='px-6 pt-8 pb-16'>
-      <div className='bg-white rounded-t-md border-b border-border-line p-10'>
-        <div className='flex justify-between items-center'>
-          <h2 className='text-body'>INFO</h2>
-          <button type='button' title='Update Profile Image'>
-            <BiDotsHorizontalRounded size={28} />
-          </button>
-        </div>
-        <div className='flex flex-col items-center my-8'>
-          <MdAccountCircle size={136} />
-        </div>
-        <p className='text-xl text-title font-semibold text-center'>
-          {initialValues.fullName}
-        </p>
-      </div>
-      <div className='bg-white rounded-b-md  p-10 mb-12'>
-        <h2 className='text-body font-semibold'>Loyalty Points</h2>
-        <div className='relative mt-6 mb-8'>
-          <Image src={LoyaltyCard} alt='Loyalty-card' />
-          <h2 className='absolute top-4 left-4 font-bold text-lg text-white'>
-            Customer
-          </h2>
-          <p className='absolute bottom-4 left-4 font-semibold text-2xl text-white'>
-            {320} <span className='text-[10px] text-white'>points</span>
-          </p>
-        </div>
-        <p className='text-body text-sm text-center'>
-          {180} points become a master
-        </p>
-        <div className='bg-background-v2 h-4 rounded-lg w-full relative mt-2 mb-10'>
-          <div
-            style={{ width: `${Math.ceil(320 / 6)}%` }}
-            className='bg-primary h-full rounded-lg'
-          />{" "}
-        </div>
-      </div>
-
-      <div>
-        <h2 className='font-semibold text-lg'>Account Settings</h2>
-        <div className='bg-white rounded-md px-6 py-8 mt-6 mb-2'>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={detailAccountSchema}
-            onSubmit={async (values) => {
-              console.log(values)
-            }}
-          >
-            {(props: FormikProps<detailAccountValues>) => {
-              const { values, errors, touched, handleChange } = props
-              console.log(props.values)
-              return (
-                <Form>
-                  <h2 className='w-full pt-2 border-b border-border-line text-title mb-10 py-2'>
-                    Details Information
-                  </h2>
-                  <div className='flex flex-col mb-6'>
-                    <label htmlFor='fullName' className='text-body'>
-                      Full Name
-                    </label>
-                    <Field
-                      className='px-4 py-3 mt-3 text-body rounded-md border border-border-line focus:outline-none'
-                      type='text'
-                      name='fullName'
-                      onChange={handleChange}
-                      value={values.fullName}
-                      placeholder={values.fullName}
-                    />
-                    {touched.fullName && errors.fullName ? (
-                      <div className='text-error text-sm mt-1'>
-                        {errors.fullName}
-                      </div>
-                    ) : null}
-                  </div>
+    <div>
+      <h2 className='font-semibold text-lg lg:hidden'>Account Settings</h2>
+      <div className='bg-white rounded-md px-6 py-8 mt-6 mb-2 lg:mt-0'>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={detailAccountSchema}
+          onSubmit={async (values) => {
+            console.log(values)
+          }}
+        >
+          {(props: FormikProps<detailAccountValues>) => {
+            const { values, errors, touched, handleChange } = props
+            console.log(props.values)
+            return (
+              <Form>
+                <h2 className='w-full pt-2 border-b border-border-line text-title mb-10 py-2'>
+                  Details Information
+                </h2>
+                <div className='flex flex-col mb-6'>
+                  <label htmlFor='fullName' className='text-body'>
+                    Full Name
+                  </label>
+                  <Field
+                    className='px-4 py-3 mt-3 text-body rounded-md border border-border-line focus:outline-none'
+                    type='text'
+                    name='fullName'
+                    onChange={handleChange}
+                    value={values.fullName}
+                    placeholder={values.fullName}
+                  />
+                  {touched.fullName && errors.fullName ? (
+                    <div className='text-error text-sm mt-1'>
+                      {errors.fullName}
+                    </div>
+                  ) : null}
+                </div>
+                <div className='lg:grid lg:grid-cols-2 lg:gap-x-8'>
                   <div className='flex flex-col mb-6'>
                     <label htmlFor='email' className='text-body'>
                       Email
@@ -164,9 +132,12 @@ const DetailAccount = () => {
                       </div>
                     ) : null}
                   </div>
-                  <h2 className='w-full pt-2 border-b border-border-line text-title mb-10 py-2'>
-                    Account and Privacy
-                  </h2>
+                </div>
+
+                <h2 className='w-full pt-2 border-b border-border-line text-title mb-10 py-2'>
+                  Account and Privacy
+                </h2>
+                <div className='lg:grid lg:grid-cols-2 lg:gap-x-8'>
                   <div className='flex flex-col mb-6'>
                     <label htmlFor='password' className='text-body'>
                       New Password
@@ -224,18 +195,18 @@ const DetailAccount = () => {
                       </div>
                     ) : null}
                   </div>
+                </div>
 
-                  <button
-                    className='bg-primary text-white text-sm font-bold w-full py-2 rounded-md mb-4'
-                    type='submit'
-                  >
-                    Update changes
-                  </button>
-                </Form>
-              )
-            }}
-          </Formik>
-        </div>
+                <button
+                  className='bg-primary text-white text-sm font-bold w-full lg:w-1/2 py-2 rounded-md mb-4'
+                  type='submit'
+                >
+                  Update changes
+                </button>
+              </Form>
+            )
+          }}
+        </Formik>
       </div>
     </div>
   )
