@@ -1,10 +1,11 @@
 "use client"
 import Image from "next/image"
-import EventCard from "./_components/EventCard"
 import Hero from "@/public/hero.webp"
 import Link from "next/link"
 import * as yup from "yup"
+import EventList from "@/utils/MOCK_DATA"
 import { Field, Form, Formik, FormikProps } from "formik"
+import { EventCard } from "@/components"
 
 const landingSchema = yup.object().shape({
   email: yup
@@ -29,7 +30,7 @@ export default function Home() {
           alt='hero'
           className='w-full lg:h-[80vh] object-cover'
         />
-        <div className='absolute flex flex-col justify-between inset-0 bg-primary bg-opacity-40  p-6 lg:p-20'>
+        <div className='absolute flex flex-col justify-between inset-0 bg-primary bg-opacity-40 p-6 lg:p-20'>
           <h2 className='text-white md:text-7xl font-bold'>
             DISCOVER <br /> POPULAR <br /> EVENTS TODAY
           </h2>
@@ -43,37 +44,54 @@ export default function Home() {
         </div>
       </div>
       <div className='pt-12 pb-14'>
-        <div className='flex items-center justify-between px-6 pb-8'>
+        <div className='flex items-center justify-between px-2 sm:px-6 pb-8'>
           <h2 className='text-lg font-bold text-primary'>Popular Events</h2>
-          <Link href={"/popularevents"} className='font-semibold text-primary'>
+          <Link
+            href={"/view-all/popular"}
+            className='font-semibold text-primary'
+          >
             View All
           </Link>
         </div>
-        <div className='ml-6'>
-          <EventCard
-            rating={"4.5"}
-            title={"Self Development Workshop"}
-            date={"Tuesday, 07 July 2020 - 04:30pm"}
-            location={"Grand Convexion Mapura Hotel, Taiwan"}
-            price={"50000.00"}
-          />
+        <div className='flex flex-wrap justify-around gap-y-6 px-1 sm:px-6'>
+          {EventList.slice(0, 6).map((e, i) => {
+            return (
+              <EventCard
+                key={i}
+                rating={e.rating}
+                title={e.title}
+                date={`${e.date} - ${e.time}`}
+                location={`${e.vanue}, ${e.location}`}
+                price={e.price}
+              />
+            )
+          })}
         </div>
       </div>
       <div className='pt-12 pb-14 bg-background-v2'>
-        <div className='flex items-center justify-between px-6 pb-8'>
+        <div className='flex items-center justify-between px-2 sm:px-6 pb-8'>
           <h2 className='text-lg font-bold text-primary'>Upcoming Events</h2>
-          <Link href={"/popularevents"} className='font-semibold text-primary'>
+          <Link
+            href={"/view-all/upcoming"}
+            className='font-semibold text-primary'
+          >
             View All
           </Link>
         </div>
-        <div className='ml-6'>
-          <EventCard
-            rating={"4.5"}
-            title={"Self Development Workshop"}
-            date={"Tuesday, 07 July 2020 - 04:30pm"}
-            location={"Grand Convexion Mapura Hotel, Taiwan"}
-            price={"50000.00"}
-          />
+        <div className='flex flex-wrap justify-around gap-y-6 px-1 sm:px-6'>
+          {EventList.slice(0, 6).map((e, i) => {
+            console.log(e)
+            return (
+              <EventCard
+                key={i}
+                rating={e.rating}
+                title={e.title}
+                date={`${e.date} - ${e.time}`}
+                location={`${e.vanue}, ${e.location}`}
+                price={e.price}
+              />
+            )
+          })}
         </div>
         <div className='bg-white mx-6 mt-16 px-8 py-12 rounded-md'>
           <h2 className='font-bold text-primary text-center'>
