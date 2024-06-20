@@ -17,14 +17,6 @@ const nav = [
     name: "Events",
     path: "/events",
   },
-  {
-    name: "Organizers",
-    path: "/organizers",
-  },
-  {
-    name: "Locations",
-    path: "/locations",
-  },
 ]
 
 const Navbar = () => {
