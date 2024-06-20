@@ -31,10 +31,8 @@ const Footer = () => {
         <div className='mb-12 lg:pl-20'>
           <h2 className='font-semibold mb-3'>Explore</h2>
           <div className='flex gap-x-10 gap-y-3 flex-wrap text-label lg:text-body lg:flex-col'>
-            <Link href={"#"}>Events</Link>
-            <Link href={"#"}>Organizers</Link>
-            <Link href={"#"}>Locations</Link>
-            <Link href={"#"}>About</Link>
+            <Link href={"/"}>Home</Link>
+            <Link href={"/events"}>Events</Link>
           </div>
         </div>
         <div className='mb-12'>
