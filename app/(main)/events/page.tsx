@@ -77,16 +77,7 @@ const page = () => {
         <div className='bg-background px-1 sm:px-6 py-6 lg:py-12 flex flex-col items-center gap-y-8 lg:gap-y-12'>
           <div className='flex flex-wrap justify-around gap-y-6'>
             {EventList.slice(0, 6).map((e, i) => {
-              return (
-                <EventCard
-                  key={i}
-                  rating={e.rating}
-                  title={e.title}
-                  date={`${e.date} - ${e.time}`}
-                  location={`${e.vanue}, ${e.location}`}
-                  price={e.price}
-                />
-              )
+              return <EventCard key={i} {...e} />
             })}
           </div>
           <button
