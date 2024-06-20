@@ -43,7 +43,6 @@ interface detailAccountValues {
 const DetailAccount = () => {
   const [isShow, setIsShow] = useState(false)
   const [isShowConfirm, setIsShowConfirm] = useState(false)
-  const [tab, setTab] = useState<number>(1)
 
   const initialValues: detailAccountValues = {
     fullName: "Jonny Doe",

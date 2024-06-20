@@ -71,7 +71,6 @@ export default function Home() {
         </div>
         <div className='flex flex-wrap justify-around gap-y-6 px-1 sm:px-6'>
           {EventList.slice(0, 6).map((e, i) => {
-            console.log(e)
             return <EventCard key={i} {...e} />
           })}
         </div>

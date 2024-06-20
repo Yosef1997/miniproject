@@ -11,24 +11,6 @@ type Props = {
   }
 }
 
-type Event = {
-  id: number
-  title: string
-  date: string
-  time: string
-  location: string
-  vanue: string
-  category: string
-  organizer: string
-  email: string
-  phone: string
-  description: string
-  price: number
-  eventImg: string
-  organizerImg: string
-  rating: number
-}
-
 export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
@@ -39,7 +21,7 @@ export const generateMetadata = async ({
 }
 
 const page: React.FC<Props> = ({ params }) => {
-  const event: Event = EventList[params.eventId]
+  const event = EventList[params.eventId]
   return (
     <div>
       <div className='border-b border-border-line lg:grid lg:grid-cols-3 lg:px-16 xl:px-32 lg:py-12'>
@@ -61,7 +43,7 @@ const page: React.FC<Props> = ({ params }) => {
               <p className='text-body'>{event.category}</p>
             </div>
             <Link
-              href={`/book/${event.id}`}
+              href={`/events/${event.id}/order`}
               className='bg-primary rounded-md text-center mt-3 lg:mt-0 text-white-btn p-3 font-semibold w-full lg:w-fit'
             >
               Book now
