@@ -13,7 +13,7 @@ import Spark from "@/public/spark.svg"
 
 const Footer = () => {
   return (
-    <div className='px-6 lg:px-16 xl:px-32'>
+    <div className='px-6 pt-16 xl:pt-28 lg:px-16 xl:px-32'>
       <div className='lg:grid lg:grid-cols-4'>
         <div className='mb-5'>
           <Image
