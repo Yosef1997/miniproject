@@ -5,6 +5,7 @@ import * as yup from "yup"
 import { Field, Form, Formik, FormikProps } from "formik"
 import TickitzContext from "@/context/TickitzContext"
 import Link from "next/link"
+import moment from "moment"
 
 type Props = {
   params: {
@@ -32,6 +33,7 @@ interface personalInfoValues {
 
 const page: React.FC<Props> = ({ params }) => {
   const [totalOrder, setTotalOrder] = useState<number>(1)
+  let [usePoint, setUsePoint] = useState<number>(0)
   const events = EventList[params.eventId]
   const { event, setEvent } = useContext(TickitzContext)
   const initialValues: personalInfoValues = {
@@ -44,7 +46,7 @@ const page: React.FC<Props> = ({ params }) => {
     const fetch = () => setEvent(EventList[params.eventId])
     fetch()
   }, [])
-  console.log(event)
+
   return (
     <div className='bg-background py-8 lg:py-14 px-6 md:px-16 xl:px-32 lg:grid lg:grid-cols-3 lg:gap-x-6'>
       <div className='lg:col-span-2'>
@@ -52,11 +54,15 @@ const page: React.FC<Props> = ({ params }) => {
         <div className='bg-white px-3 lg:p-6 rounded-md'>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <p className='text-label text-sm'>Date & time</p>
-            <p className='text-title'>{events.date}</p>
+            <p className='text-title'>
+              {moment(new Date()).format("MMMM, DD - hh:mm A")}
+            </p>
           </div>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <p className='text-label text-sm'>Event title</p>
-            <p className='text-title line-clamp-2 w-1/2'>{events.title}</p>
+            <p className='text-title line-clamp-2 w-1/2 text-end'>
+              {events.title}
+            </p>
           </div>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <p className='text-label text-sm'>Location</p>
@@ -83,6 +89,32 @@ const page: React.FC<Props> = ({ params }) => {
             />
           </div>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
+            <div className='flex flex-col items-start'>
+              <p className='text-label text-sm'>Use points</p>
+              <p className='text-label text-sm'>(10000)</p>
+            </div>
+            <input
+              onChange={(e) => {
+                setUsePoint(e.target.checked ? 1000 : 0)
+              }}
+              type='checkbox'
+            />
+          </div>
+          <div className='flex justify-between items-center py-3 border-b border-border-line'>
+            <p className='text-label text-sm'>Use voucher</p>
+            <div className='bg-background-v2 p-3 rounded-md w-fit'>
+              <select
+                name='use voucher'
+                id='voucher'
+                className='bg-background-v2'
+              >
+                <option value=''>Select voucher</option>
+                <option value='Diskon 10%'>Diskon 10%</option>
+                <option value='Diskon 20%'>Diskon 20%</option>
+              </select>
+            </div>
+          </div>
+          <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <p className='text-label text-sm'>Payment method</p>
             <div className='bg-background-v2 p-3 rounded-md w-fit'>
               <select
@@ -99,7 +131,9 @@ const page: React.FC<Props> = ({ params }) => {
           </div>
           <div className='flex justify-between items-center py-3'>
             <p className='text-label text-sm'>Total Payment</p>
-            <p className='text-title'>IDR {totalOrder * events.price}</p>
+            <p className='text-title'>
+              IDR {totalOrder * events.price - usePoint}
+            </p>
           </div>
         </div>
       </div>
