@@ -66,7 +66,7 @@ const Navbar = () => {
             type='button'
             className='bg-primary px-7 py-3.5 rounded-md text-white-btn font-bold'
           >
-            <Link href={"/signup"}> Sign Up</Link>
+            <Link href={"/sign-up"}> Sign Up</Link>
           </button>
         </div>
       </div>
@@ -104,7 +104,7 @@ const Navbar = () => {
             })}
             <Link
               className='flex text-title justify-center items-center py-4 border-b border-border-line'
-              href={"/signup"}
+              href={"/sign-up"}
             >
               Sign Up
             </Link>

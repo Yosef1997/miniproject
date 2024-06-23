@@ -9,7 +9,7 @@ import { IoIosEye } from "react-icons/io"
 import { IoIosEyeOff } from "react-icons/io"
 import Link from "next/link"
 
-const signupSchema = yup.object().shape({
+const signinSchema = yup.object().shape({
   email: yup
     .string()
     .email("Invalid email address format")
@@ -24,49 +24,37 @@ const signupSchema = yup.object().shape({
     .required("Password is required"),
 })
 
-interface signupValues {
+interface signinValues {
   email: string
   password: string
-  role: string
-  referral: string
 }
 
 const page = () => {
   const [isShow, setIsShow] = useState(false)
-  const initialValues: signupValues = {
-    email: "",
-    password: "",
-    role: "customer",
-    referral: "",
-  }
+  const initialValues: signinValues = { email: "", password: "" }
 
   return (
     <div className='lg:grid lg:grid-cols-3 min-h-screen'>
-      <div className='hidden justify-center px-28 lg:flex lg:flex-col lg:col-span-2 bg-primary-dark bg-opacity-80'>
-        <Image src={TickitzWhite} alt='Tickitz-white' />
-        <h2 className='text-white font-bold text-5xl mt-24 mb-5'>
-          Lets build your account
-        </h2>
-        <p className='text-white text-2xl'>
-          To be a loyal moviegoer and access all of features,
-          <br />
-          your details are required.
-        </p>
+      <div className='hidden justify-center items-center lg:flex lg:flex-col lg:col-span-2 bg-primary-dark bg-opacity-80'>
+        <Image src={TickitzWhite} width={500} alt='Tickitz-white' />
+        <h2 className='text-white text-5xl'>wait, watch, wow!</h2>
       </div>
-      <div className='px-6 my-12 lg:px-14 lg:mt-20'>
+      <div className='px-6 my-12 lg:px-14 lg:mt-12 xl:my-auto'>
         <Image className='lg:hidden' src={Tickitz} alt='Tickitz-mobile' />
-        <h2 className='text-title text-2xl py-10 lg:hidden'>Sign Up</h2>
-        <h2 className='text-title text-2xl mb-11 max-lg:hidden'>
-          Fill your additional details
+        <h2 className='text-title text-2xl lg:text-5xl py-10 lg:py-0'>
+          Sign In
         </h2>
+        <p className='text-lg text-placeholder mt-3 mb-12 hidden lg:block'>
+          Sign in with your data that you entered during your registration
+        </p>
         <Formik
           initialValues={initialValues}
-          validationSchema={signupSchema}
+          validationSchema={signinSchema}
           onSubmit={async (values) => {
             console.log(values)
           }}
         >
-          {(props: FormikProps<signupValues>) => {
+          {(props: FormikProps<signinValues>) => {
             const { values, errors, touched, handleChange } = props
             console.log(props.values)
             return (
@@ -87,7 +75,7 @@ const page = () => {
                     </div>
                   ) : null}
                 </div>
-                <div className='flex flex-col mb-6'>
+                <div className='flex flex-col mb-10'>
                   <label htmlFor='password'>Password</label>
                   <div className='px-6 py-5 mt-3 rounded-md border border-border-line flex items-center'>
                     <Field
@@ -112,57 +100,21 @@ const page = () => {
                     </div>
                   ) : null}
                 </div>
-                <div
-                  className={`flex flex-col ${
-                    values.role === "customer" ? "mb-6" : "mb-10"
-                  }`}
-                >
-                  <label htmlFor='role'>Sign up as</label>
-                  <div className='px-6 py-5 mt-3 rounded-md border border-border-line '>
-                    <Field
-                      as='select'
-                      name='role'
-                      className='focus:outline-none w-full'
-                    >
-                      <option value='customer'>Customer</option>
-                      <option value='event organizer'>Event organizer</option>
-                    </Field>
-                  </div>
-                </div>
-                {values.role === "customer" ? (
-                  <div className='flex flex-col mb-10'>
-                    <label htmlFor='referral'>Referral</label>
-                    <Field
-                      className='px-6 py-5 mt-3 rounded-md border border-border-line focus:outline-none'
-                      type='text'
-                      name='referral'
-                      onChange={handleChange}
-                      value={values.referral}
-                      placeholder='Write your referral(optinal)'
-                    />
-                    {touched.referral && errors.referral ? (
-                      <div className='text-error text-sm mt-1'>
-                        {errors.referral}
-                      </div>
-                    ) : null}
-                  </div>
-                ) : null}
-
                 <button
                   className='bg-primary text-white font-bold w-full py-6 rounded-md'
                   type='submit'
                 >
-                  Join for free
+                  Sign In
                 </button>
               </Form>
             )
           }}
         </Formik>
         <p className='text-label text-center font-semibold mt-8'>
-          Do you already have an account?{" "}
+          Forgot your password?{" "}
           <span>
-            <Link href={"/signin"} className='text-primary underline'>
-              Log in
+            <Link href={"/forgot-password"} className='text-primary underline'>
+              Reset now
             </Link>
           </span>
         </p>
