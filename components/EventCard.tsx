@@ -21,12 +21,13 @@ interface EventProps {
   eventImg: string
   organizerImg: string
   rating: number
+  urlLink: string
 }
 
 const EventCard: React.FC<EventProps> = (props) => {
   return (
     <div className='w-[150px] md:w-[300px] xl:w-[400px] bg-white rounded-md'>
-      <Link href={`/events/${props.id}`}>
+      <Link href={`/${props.urlLink}/${props.id}`}>
         <div className='relative'>
           <Image
             src={EventImg}

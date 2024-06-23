@@ -55,7 +55,7 @@ export default function Home() {
         </div>
         <div className='flex flex-wrap justify-around gap-y-6 px-1 sm:px-6'>
           {EventList.slice(0, 6).map((e, i) => {
-            return <EventCard key={i} {...e} />
+            return <EventCard key={i} {...e} urlLink='events' />
           })}
         </div>
       </div>
@@ -71,7 +71,7 @@ export default function Home() {
         </div>
         <div className='flex flex-wrap justify-around gap-y-6 px-1 sm:px-6'>
           {EventList.slice(0, 6).map((e, i) => {
-            return <EventCard key={i} {...e} />
+            return <EventCard key={i} {...e} urlLink='events' />
           })}
         </div>
         <div className='bg-white mx-6 mt-16 px-8 py-12 rounded-md'>
