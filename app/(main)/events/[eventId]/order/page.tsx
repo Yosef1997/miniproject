@@ -31,7 +31,7 @@ interface personalInfoValues {
   phone: string
 }
 
-const page: React.FC<Props> = ({ params }) => {
+const Order: React.FC<Props> = ({ params }) => {
   const [totalOrder, setTotalOrder] = useState<number>(1)
   let [usePoint, setUsePoint] = useState<number>(0)
   const events = EventList[params.eventId]
@@ -223,4 +223,4 @@ const page: React.FC<Props> = ({ params }) => {
   )
 }
 
-export default page
+export default Order

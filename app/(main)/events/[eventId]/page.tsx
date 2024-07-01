@@ -20,7 +20,7 @@ export const generateMetadata = async ({
   }
 }
 
-const page: React.FC<Props> = ({ params }) => {
+const EventId: React.FC<Props> = ({ params }) => {
   const event = EventList[params.eventId]
   return (
     <div>
@@ -81,4 +81,4 @@ const page: React.FC<Props> = ({ params }) => {
   )
 }
 
-export default page
+export default EventId

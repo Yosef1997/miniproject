@@ -7,7 +7,7 @@ import { useDebouncedCallback } from "use-debounce"
 import EventList from "@/utils/MOCK_DATA"
 import { EventCard } from "@/components"
 
-const page = () => {
+const Event = () => {
   const debounced = useDebouncedCallback(
     (value) => {
       // logic for search or hit api search
@@ -93,4 +93,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Event
