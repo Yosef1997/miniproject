@@ -4,7 +4,7 @@ import DetailAccount from "./_components/DetailAccount"
 import OrderHistory from "./_components/OrderHistory"
 import ProfileImage from "./_components/ProfileImage"
 
-const page = () => {
+const Profile = () => {
   const [tab, setTab] = useState<number>(1)
   return (
     <div className='bg-background'>
@@ -86,4 +86,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Profile
