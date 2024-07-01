@@ -41,7 +41,7 @@ const ForgotPassword = () => {
         <h2 className='text-2xl font-semibold mt-10 mb-2.5 hidden lg:block'>
           Fill your complete email
         </h2>
-        <p>we'll send a link to your email shortly</p>
+        <p>we&apos;ll send a link to your email shortly</p>
         <Formik
           initialValues={initialValues}
           validationSchema={forgotpasswordSchema}
