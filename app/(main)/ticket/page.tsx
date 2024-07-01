@@ -5,7 +5,7 @@ import Hero from "@/public/hero.webp"
 import TickitzContext from "@/context/TickitzContext"
 import TickitzWhite from "@/public/tickitz-white.svg"
 
-const page = () => {
+const Ticket = () => {
   const { event } = useContext(TickitzContext)
 
   return (
@@ -74,4 +74,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Ticket
