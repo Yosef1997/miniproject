@@ -18,7 +18,7 @@ export const generateMetadata = async ({
   }
 }
 
-const page = () => {
+const DashboardEventId = () => {
   return (
     <div className='bg-background px-6 lg:px-[70px] pt-14 pb-24'>
       <EventForm isDetailEvent={true} />
@@ -27,4 +27,4 @@ const page = () => {
   )
 }
 
-export default page
+export default DashboardEventId
