@@ -29,7 +29,7 @@ interface signinValues {
   password: string
 }
 
-const page = () => {
+const SignIn = () => {
   const [isShow, setIsShow] = useState(false)
   const initialValues: signinValues = { email: "", password: "" }
 
@@ -123,4 +123,4 @@ const page = () => {
   )
 }
 
-export default page
+export default SignIn
