@@ -10,7 +10,7 @@ interface ViewAllProps {
   params: { slug: string[] }
 }
 
-const pages: React.FC<ViewAllProps> = ({ params }) => {
+const ViewAll: React.FC<ViewAllProps> = ({ params }) => {
   const debounced = useDebouncedCallback(
     (value) => {
       // logic for search or hit api search
@@ -101,4 +101,4 @@ const pages: React.FC<ViewAllProps> = ({ params }) => {
   )
 }
 
-export default pages
+export default ViewAll
