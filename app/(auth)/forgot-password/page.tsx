@@ -16,7 +16,7 @@ const forgotpasswordSchema = yup.object().shape({
 interface forgotpasswordValues {
   email: string
 }
-const page = () => {
+const ForgotPassword = () => {
   const initialValues: forgotpasswordValues = {
     email: "",
   }
@@ -85,4 +85,4 @@ const page = () => {
   )
 }
 
-export default page
+export default ForgotPassword
