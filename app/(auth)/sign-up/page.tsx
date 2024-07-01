@@ -31,7 +31,7 @@ interface signupValues {
   referral: string
 }
 
-const page = () => {
+const SignUp = () => {
   const [isShow, setIsShow] = useState(false)
   const initialValues: signupValues = {
     email: "",
@@ -171,4 +171,4 @@ const page = () => {
   )
 }
 
-export default page
+export default SignUp
