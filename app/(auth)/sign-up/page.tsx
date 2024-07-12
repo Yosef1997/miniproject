@@ -5,8 +5,8 @@ import TickitzWhite from "@/public/tickitz-white.svg"
 import Image from "next/image"
 import { Field, Form, Formik, FormikProps } from "formik"
 import * as yup from "yup"
-import { IoIosEye } from "react-icons/io"
-import { IoIosEyeOff } from "react-icons/io"
+import { IoIosEye } from "@react-icons/all-files/io/IoIosEye"
+import { IoIosEyeOff } from "@react-icons/all-files/io/IoIosEyeOff"
 import Link from "next/link"
 
 const signupSchema = yup.object().shape({

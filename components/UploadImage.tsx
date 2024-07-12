@@ -1,5 +1,5 @@
 "use client"
-import { BiImageAdd } from "react-icons/bi"
+import { BiImageAdd } from "@react-icons/all-files/bi/BiImageAdd"
 import Image from "next/image"
 import React, { ChangeEvent, useState } from "react"
 

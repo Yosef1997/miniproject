@@ -1,8 +1,8 @@
 import { Field, Form, Formik, FormikProps } from "formik"
 import React, { useState } from "react"
 import * as yup from "yup"
-import { IoIosEye } from "react-icons/io"
-import { IoIosEyeOff } from "react-icons/io"
+import { IoIosEye } from "@react-icons/all-files/io/IoIosEye"
+import { IoIosEyeOff } from "@react-icons/all-files/io/IoIosEyeOff"
 
 const detailAccountSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),

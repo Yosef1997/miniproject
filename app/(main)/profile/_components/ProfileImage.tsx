@@ -1,7 +1,7 @@
 import Image from "next/image"
 import React from "react"
-import { BiDotsHorizontalRounded } from "react-icons/bi"
-import { MdAccountCircle } from "react-icons/md"
+import { BiDotsHorizontalRounded } from "@react-icons/all-files/bi/BiDotsHorizontalRounded"
+import { MdAccountCircle } from "@react-icons/all-files/md/MdAccountCircle"
 import LoyaltyCard from "@/public/loyalty-card.svg"
 
 const ProfileImage: React.FC<{ name: string }> = ({ name }) => {

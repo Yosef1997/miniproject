@@ -1,4 +1,4 @@
-import { BsFillStarFill } from "react-icons/bs"
+import { BsFillStarFill } from "@react-icons/all-files/bs/BsFillStarFill"
 import Image from "next/image"
 import React from "react"
 import EventImg from "@/public/hero.webp"

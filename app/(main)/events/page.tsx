@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import React from "react"
-import { AiOutlineSearch } from "react-icons/ai"
+import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch"
 import { useDebouncedCallback } from "use-debounce"
 import EventList from "@/utils/MOCK_DATA"
 import { EventCard } from "@/components"
