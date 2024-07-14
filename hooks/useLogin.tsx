@@ -4,18 +4,18 @@ import { response } from "@/types/response"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-const useForgotPassword = () => {
+const useLogin = () => {
   const [response, setResponse] = useState<response>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<unknown>(null)
   const { toast } = useToast()
   const router = useRouter()
 
-  const handleForgotPassword = async (request: auth) => {
+  const handleSignIn = async (request: auth) => {
     try {
       setLoading(true)
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_HOSTNAME_API}${process.env.NEXT_PUBLIC_PREFIX_API}/auth/forgot-password`,
+        `${process.env.NEXT_PUBLIC_HOSTNAME_API}${process.env.NEXT_PUBLIC_PREFIX_API}/auth/login`,
         {
           method: "POST",
           headers: {
@@ -26,34 +26,34 @@ const useForgotPassword = () => {
       )
 
       if (!response.ok) {
-        throw new Error("Failed to add user.")
+        throw new Error("Failed to login.")
       }
 
       const result: response = await response.json()
+      setLoading(false)
+      router.push("/")
       toast({
         variant: "success",
-        title: "Forgot Password Success",
+        title: "Sign In Success",
         description: result.message,
       })
-      setLoading(false)
-      router.push("/sign-in")
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Forgot Password Failed",
+        title: "Sign In Failed",
       })
       setLoading(false)
-      console.log("error sign up", error)
+      console.log("error sign in", error)
       setError(error)
     }
   }
 
   return {
-    handleForgotPassword,
+    handleSignIn,
     response,
     loading,
     error,
   }
 }
 
-export default useForgotPassword
+export default useLogin

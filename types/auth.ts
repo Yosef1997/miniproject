@@ -1,4 +1,4 @@
-export interface ForgotPassword {
+export interface auth {
   email: string
   password: string
 }
