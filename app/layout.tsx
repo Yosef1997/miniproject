@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Mulish } from "next/font/google"
 import "./globals.css"
 import TickitzProvider from "@/context/TickitzProvider"
+import { Toaster } from "@/components/ui/toaster"
 
 const mulish = Mulish({ subsets: ["latin"] })
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={mulish.className}>
         <TickitzProvider>{children}</TickitzProvider>
+        <Toaster />
       </body>
     </html>
   )

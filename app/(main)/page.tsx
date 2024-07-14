@@ -5,7 +5,7 @@ import Link from "next/link"
 import * as yup from "yup"
 import EventList from "@/utils/MOCK_DATA"
 import { Field, Form, Formik, FormikProps } from "formik"
-import { EventCard } from "@/components"
+import EventCard from "@/components/EventCard"
 
 const landingSchema = yup.object().shape({
   email: yup

@@ -2,7 +2,7 @@
 import React from "react"
 import { Field, Form, Formik, FormikProps } from "formik"
 import * as yup from "yup"
-import { UploadImage } from "@/components"
+import UploadImage from "@/components/UploadImage"
 
 const dashboardSchema = yup.object().shape({
   name: yup.string().required("Event name is required"),

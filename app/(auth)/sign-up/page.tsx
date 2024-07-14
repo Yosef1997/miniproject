@@ -8,6 +8,8 @@ import * as yup from "yup"
 import { IoIosEye } from "@react-icons/all-files/io/IoIosEye"
 import { IoIosEyeOff } from "@react-icons/all-files/io/IoIosEyeOff"
 import Link from "next/link"
+import useSignup from "@/hooks/useSignup"
+import { useRouter } from "next/navigation"
 
 const signupSchema = yup.object().shape({
   email: yup
@@ -33,11 +35,21 @@ interface signupValues {
 
 const SignUp = () => {
   const [isShow, setIsShow] = useState(false)
+  const router = useRouter()
+  const { handleRegister, loading, error } = useSignup()
   const initialValues: signupValues = {
     email: "",
     password: "",
-    role: "customer",
+    role: "CUSTOMER",
     referral: "",
+  }
+
+  if (error) {
+    return (
+      <div>
+        <p>Something error ...</p>
+      </div>
+    )
   }
 
   return (
@@ -63,12 +75,11 @@ const SignUp = () => {
           initialValues={initialValues}
           validationSchema={signupSchema}
           onSubmit={async (values) => {
-            console.log(values)
+            await handleRegister(values)
           }}
         >
           {(props: FormikProps<signupValues>) => {
             const { values, errors, touched, handleChange } = props
-            console.log(props.values)
             return (
               <Form>
                 <div className='flex flex-col mb-6'>
@@ -124,12 +135,12 @@ const SignUp = () => {
                       name='role'
                       className='focus:outline-none w-full'
                     >
-                      <option value='customer'>Customer</option>
-                      <option value='event organizer'>Event organizer</option>
+                      <option value='CUSTOMER'>Customer</option>
+                      <option value='ORGANIZER'>Organizer</option>
                     </Field>
                   </div>
                 </div>
-                {values.role === "customer" ? (
+                {values.role === "CUSTOMER" ? (
                   <div className='flex flex-col mb-10'>
                     <label htmlFor='referral'>Referral</label>
                     <Field
@@ -148,12 +159,16 @@ const SignUp = () => {
                   </div>
                 ) : null}
 
-                <button
-                  className='bg-primary text-white font-bold w-full py-6 rounded-md'
-                  type='submit'
-                >
-                  Join for free
-                </button>
+                {loading ? (
+                  <p>loading...</p>
+                ) : (
+                  <button
+                    className='bg-primary text-white font-bold w-full py-6 rounded-md'
+                    type='submit'
+                  >
+                    Join for free
+                  </button>
+                )}
               </Form>
             )
           }}

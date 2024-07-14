@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react"
 import EventList from "@/utils/MOCK_DATA"
-import { EventCard } from "@/components"
+import EventCard from "@/components/EventCard"
 
 const ListEvents = () => {
   const [tab, setTab] = useState<number>(1)
