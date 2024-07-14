@@ -1,21 +1,21 @@
 import { useToast } from "@/components/ui/use-toast"
-import { CreateUserRequest } from "@/types/register"
+import { ForgotPassword } from "@/types/forgotPassword"
 import { response } from "@/types/response"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-const useSignup = () => {
+const useForgotPassword = () => {
   const [response, setResponse] = useState<response>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<unknown>(null)
   const { toast } = useToast()
   const router = useRouter()
 
-  const handleRegister = async (request: CreateUserRequest) => {
+  const handleForgotPassword = async (request: ForgotPassword) => {
     try {
       setLoading(true)
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_HOSTNAME_API}${process.env.NEXT_PUBLIC_PREFIX_API}/users/register`,
+        `${process.env.NEXT_PUBLIC_HOSTNAME_API}${process.env.NEXT_PUBLIC_PREFIX_API}/auth/forgot-password`,
         {
           method: "POST",
           headers: {
@@ -32,14 +32,15 @@ const useSignup = () => {
       const result: response = await response.json()
       toast({
         variant: "success",
-        title: "Sign Up Success",
+        title: "Forgot Password Success",
         description: result.message,
       })
+      setLoading(false)
       router.push("/sign-in")
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Sign Up Failed",
+        title: "Forgot Password Failed",
       })
       setLoading(false)
       console.log("error sign up", error)
@@ -48,11 +49,11 @@ const useSignup = () => {
   }
 
   return {
-    handleRegister,
+    handleForgotPassword,
     response,
     loading,
     error,
   }
 }
 
-export default useSignup
+export default useForgotPassword

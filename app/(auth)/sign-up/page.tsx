@@ -10,6 +10,8 @@ import { IoIosEyeOff } from "@react-icons/all-files/io/IoIosEyeOff"
 import Link from "next/link"
 import useSignup from "@/hooks/useSignup"
 import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 const signupSchema = yup.object().shape({
   email: yup
@@ -160,7 +162,10 @@ const SignUp = () => {
                 ) : null}
 
                 {loading ? (
-                  <p>loading...</p>
+                  <Button disabled>
+                    <ReloadIcon className='mr-2 h-4 w-4 animate-spin' />
+                    Please wait
+                  </Button>
                 ) : (
                   <button
                     className='bg-primary text-white font-bold w-full py-6 rounded-md'
