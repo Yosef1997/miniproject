@@ -6,6 +6,7 @@ import * as yup from "yup"
 import EventList from "@/utils/MOCK_DATA"
 import { Field, Form, Formik, FormikProps } from "formik"
 import EventCard from "@/components/EventCard"
+import useHome from "@/hooks/useHome"
 
 const landingSchema = yup.object().shape({
   email: yup
@@ -19,6 +20,8 @@ interface landingValues {
 }
 
 export default function Home() {
+  const { response } = useHome()
+
   const initialValues: landingValues = {
     email: "",
   }
@@ -54,8 +57,8 @@ export default function Home() {
           </Link>
         </div>
         <div className='flex flex-wrap justify-around gap-y-6 px-1 sm:px-6'>
-          {EventList.slice(0, 6).map((e, i) => {
-            return <EventCard key={i} {...e} urlLink='events' />
+          {response?.data.popular.map((e, i) => {
+            return <EventCard key={i} urlLink='events' event={e} />
           })}
         </div>
       </div>
@@ -70,8 +73,8 @@ export default function Home() {
           </Link>
         </div>
         <div className='flex flex-wrap justify-around gap-y-6 px-1 sm:px-6'>
-          {EventList.slice(0, 6).map((e, i) => {
-            return <EventCard key={i} {...e} urlLink='events' />
+          {response?.data.upcoming.slice(0, 6).map((e, i) => {
+            return <EventCard key={i} event={e} urlLink='events' />
           })}
         </div>
         <div className='bg-white mx-6 mt-16 px-8 py-12 rounded-md'>
