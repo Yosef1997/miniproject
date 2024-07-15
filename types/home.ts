@@ -8,6 +8,6 @@ export interface ApiResponse {
 }
 
 interface Home {
-  popular: Event[]
-  upcoming: Event[]
+  popular: Event[] | []
+  upcoming: Event[] | []
 }
