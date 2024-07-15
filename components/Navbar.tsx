@@ -7,6 +7,7 @@ import Tickitz from "@/public/navbar-logo.svg"
 import TickitzMobile from "@/public/navbar-logo-mobile.svg"
 import Image from "next/image"
 import { useDebouncedCallback } from "use-debounce"
+import { useRouter } from "next/navigation"
 
 const nav = [
   {
@@ -22,15 +23,7 @@ const nav = [
 const Navbar = () => {
   const [showBurger, setShowBurger] = useState<boolean>(false)
   const [isSearch, setSearch] = useState(false)
-
-  const debounced = useDebouncedCallback(
-    (value) => {
-      // logic for search or hit api search
-      setSearch(false)
-    },
-    // delay in ms (1s)
-    1000
-  )
+  const router = useRouter()
 
   return (
     <div className='sticky top-0 z-50 bg-white'>
@@ -51,16 +44,7 @@ const Navbar = () => {
               isSearch ? "border" : ""
             } border-black rounded-md`}
           >
-            <AiOutlineSearch size={25} onClick={() => setSearch(!isSearch)} />
-            {isSearch ? (
-              <input
-                onChange={(e) => debounced(e.target.value)}
-                onBlur={() => setSearch(false)}
-                className='px-4 text-sm rounded-xl w-full focus:outline-none'
-                type='text'
-                placeholder='Search...'
-              />
-            ) : null}
+            <AiOutlineSearch size={25} onClick={() => router.push("/events")} />
           </div>
           <button
             type='button'
@@ -78,16 +62,16 @@ const Navbar = () => {
       {showBurger ? (
         <div className='flex flex-col absolute left-0 right-0 bg-black bg-opacity-30 min-h-screen'>
           <div className='bg-white'>
-            <div className='pt-4 pb-10 px-6 border-b border-border-line'>
-              <div className='flex items-center px-4 py-3.5 border border-border-line rounded-md'>
+            <div
+              onClick={() => {
+                router.push("/events")
+                setShowBurger(false)
+              }}
+              className='pt-4 pb-10 px-6 border-b border-border-line'
+            >
+              <div className='flex gap-x-5 items-center px-4 py-3.5 border border-border-line rounded-md'>
                 <AiOutlineSearch size={25} />
-                <input
-                  onChange={(e) => debounced(e.target.value)}
-                  onBlur={() => setSearch(false)}
-                  className='px-4 py-[6px] text-sm rounded-xl w-full focus:outline-none'
-                  type='text'
-                  placeholder='Search...'
-                />
+                <p>Search</p>
               </div>
             </div>
             {nav.map((e, i) => {
@@ -96,6 +80,7 @@ const Navbar = () => {
                   <Link
                     className='flex text-title justify-center items-center py-4 border-b border-border-line'
                     href={e.path}
+                    onClick={() => setShowBurger(false)}
                   >
                     {e.name}
                   </Link>
@@ -105,6 +90,7 @@ const Navbar = () => {
             <Link
               className='flex text-title justify-center items-center py-4 border-b border-border-line'
               href={"/sign-up"}
+              onClick={() => setShowBurger(false)}
             >
               Sign Up
             </Link>
