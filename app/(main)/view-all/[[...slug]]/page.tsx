@@ -1,12 +1,10 @@
 "use client"
 import Image from "next/image"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch"
 import { useDebouncedCallback } from "use-debounce"
-import EventList from "@/utils/MOCK_DATA"
 import EventCard from "@/components/EventCard"
 import useEvents from "@/hooks/useEvent"
-import { eventNames } from "process"
 
 interface ViewAllProps {
   params: { slug?: string[] }
