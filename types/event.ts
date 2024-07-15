@@ -1,4 +1,4 @@
-export interface Event {
+export interface Events {
   id: number
   eventName: string
   eventImage: string
@@ -57,4 +57,38 @@ export interface Promotion {
   discount: number
   expiredDate: string
   eventId: number
+}
+
+export interface EventResponse {
+  statusCode: number
+  message: string
+  success: boolean
+  data: {
+    totalPages: number
+    totalElements: number
+    size: number
+    content: Events[]
+    number: number
+    sort: {
+      empty: boolean
+      sorted: boolean
+      unsorted: boolean
+    }
+    numberOfElements: number
+    first: boolean
+    last: boolean
+    pageable: {
+      pageNumber: number
+      pageSize: number
+      sort: {
+        empty: boolean
+        sorted: boolean
+        unsorted: boolean
+      }
+      offset: number
+      paged: boolean
+      unpaged: boolean
+    }
+    empty: boolean
+  }
 }

@@ -1,4 +1,4 @@
-import { Event } from "./event"
+import { Events } from "./event"
 
 export interface ApiResponse {
   statusCode: number
@@ -8,6 +8,6 @@ export interface ApiResponse {
 }
 
 interface Home {
-  popular: Event[]
-  upcoming: Event[]
+  popular: Events[]
+  upcoming: Events[]
 }

@@ -90,7 +90,6 @@ export default function Home() {
           >
             {(props: FormikProps<landingValues>) => {
               const { values, errors, touched, handleChange } = props
-              console.log(props.values)
               return (
                 <Form className='lg:flex lg:justify-center lg:items-start lg:gap-x-4 lg:mt-10'>
                   <div className='flex flex-col my-5 lg:my-0'>
