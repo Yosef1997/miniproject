@@ -1,5 +1,4 @@
 import { ApiResponse } from "@/types/home"
-import { response } from "@/types/response"
 import { useEffect, useState } from "react"
 
 const useHome = () => {
@@ -18,7 +17,7 @@ const useHome = () => {
           throw new Error("Failed to fetch Users.")
         }
         const result: ApiResponse = await response.json()
-        console.log(result.data)
+        // console.log(result.data)
         setLoading(false)
         setResponse(result)
       } catch (error) {

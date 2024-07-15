@@ -1,23 +1,52 @@
 "use client"
 import Image from "next/image"
-import React from "react"
+import React, { useState } from "react"
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch"
 import { useDebouncedCallback } from "use-debounce"
-import EventList from "@/utils/MOCK_DATA"
 import EventCard from "@/components/EventCard"
+import useEvents from "@/hooks/useEvent"
 
 interface ViewAllProps {
-  params: { slug: string[] }
+  params: { slug?: string[] }
 }
 
 const ViewAll: React.FC<ViewAllProps> = ({ params }) => {
-  const debounced = useDebouncedCallback(
-    (value) => {
-      // logic for search or hit api search
-    },
-    // delay in ms (1s)
-    1000
-  )
+  const [search, setSearch] = useState<string>("")
+  const [category, setCategory] = useState<string>("")
+  const [location, setLocation] = useState<string>("")
+
+  const initialParams = {
+    upcoming: params.slug?.[0] !== "popular",
+    page: 0,
+    size: 12,
+  }
+
+  const { data, loading, error, refetch } = useEvents(initialParams)
+
+  const debounced = useDebouncedCallback((value) => {
+    setSearch(value)
+    console.log(value)
+    refetch({ eventName: value || undefined, page: 0 })
+  }, 1000)
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value
+    setCategory(value)
+    refetch({ category: value || undefined, page: 0 })
+  }
+
+  const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value
+    setLocation(value)
+    refetch({ location: value || undefined, page: 0 })
+  }
+
+  const handleViewMore = () => {
+    if (data) {
+      refetch({ page: (data.data.pageable.pageNumber || 0) + 1 }, true)
+    }
+  }
+
   return (
     <div>
       <div className='relative'>
@@ -59,6 +88,7 @@ const ViewAll: React.FC<ViewAllProps> = ({ params }) => {
                 name='Category'
                 id='category'
                 className='bg-background-v2'
+                onChange={handleCategoryChange}
               >
                 <option value=''>Category</option>
                 <option value='saab'>Saab</option>
@@ -72,6 +102,7 @@ const ViewAll: React.FC<ViewAllProps> = ({ params }) => {
                 name='Location'
                 id='location'
                 className='bg-background-v2'
+                onChange={handleLocationChange}
               >
                 <option value=''>Location</option>
                 <option value='saab'>Saab</option>
@@ -83,18 +114,27 @@ const ViewAll: React.FC<ViewAllProps> = ({ params }) => {
         </div>
 
         <div className='bg-background px-1 sm:px-6 py-6 lg:py-12 flex flex-col items-center gap-y-8 lg:gap-y-12'>
+          {loading && <div>Loading...</div>}
+          {error && <div>{error.message}</div>}
           <div className='flex flex-wrap justify-around gap-y-6'>
-            {EventList.slice(0, 6).map((e, i) => {
-              return <EventCard key={i} {...e} urlLink='events' />
-            })}
+            {data && data.data.content.length === 0 ? (
+              <p>Event not found</p>
+            ) : (
+              data?.data.content.map((e, i) => {
+                return <EventCard key={i} event={e} urlLink='events' />
+              })
+            )}
           </div>
-          <button
-            type='button'
-            title='View More'
-            className='bg-white-btn text-primary font-semibold border-2 border-primary p-2 rounded-md'
-          >
-            View More
-          </button>
+          {data && data.data.last === false && (
+            <button
+              type='button'
+              title='View More'
+              className='bg-white-btn text-primary font-semibold border-2 border-primary p-2 rounded-md'
+              onClick={handleViewMore}
+            >
+              View More
+            </button>
+          )}
         </div>
       </div>
     </div>

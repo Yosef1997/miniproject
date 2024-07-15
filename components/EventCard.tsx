@@ -4,16 +4,15 @@ import React from "react"
 import EventImg from "@/public/hero.webp"
 import moment from "moment"
 import Link from "next/link"
-import { Event, Promotion, Review, Ticket } from "@/types/event"
+import { Events, Promotion, Review, Ticket } from "@/types/event"
 
 interface EventProps {
-  event: Event
+  event: Events
   urlLink: string
 }
 
 const EventCard: React.FC<EventProps> = (props) => {
   const price: Ticket[] = props.event.tickets.sort((a, b) => b.price - a.price)
-  console.log(price)
   return (
     <div className='w-[150px] md:w-[300px] xl:w-[400px] bg-white rounded-md'>
       <Link href={`/${props.urlLink}/${props.event.id}`}>
