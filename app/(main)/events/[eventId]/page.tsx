@@ -1,11 +1,10 @@
 "use client"
-// import { Metadata } from "next"
-import React, { useEffect } from "react"
-import EventList from "@/utils/MOCK_DATA"
-import Hero from "@/public/hero.webp"
+import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import useDetailEvent from "@/hooks/useDetailEvent"
+import Loading from "@/components/Loading"
+import Error from "@/components/Error"
 
 type Props = {
   params: {
@@ -13,28 +12,16 @@ type Props = {
   }
 }
 
-// export const generateMetadata = async ({
-//   params,
-// }: Props): Promise<Metadata> => {
-//   const eventId = params.eventId
-//   return {
-//     title: `${EventList[eventId].title}`,
-//   }
-// }
-
 const EventId: React.FC<Props> = ({ params }) => {
   const { response, loading, error } = useDetailEvent(params.eventId)
 
-  const event = EventList[params.eventId]
-  console.log(response)
-
   if (error) {
-    return <div>Something error</div>
+    return <Error />
   }
 
   return (
     <div>
-      {loading && <div>Loading...</div>}
+      {loading && <Loading />}
       <div className='border-b border-border-line lg:grid lg:grid-cols-3 lg:px-16 xl:px-32 lg:py-12'>
         <div className='flex justify-center'>
           <div className='border border-border-line p-8 rounded-md w-fit'>
@@ -44,6 +31,7 @@ const EventId: React.FC<Props> = ({ params }) => {
                 alt={response?.data.eventName}
                 width={160}
                 height={245}
+                priority
                 className='w-[160px] h-[245px] object-cover rounded-md'
               />
             )}

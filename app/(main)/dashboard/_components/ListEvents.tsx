@@ -39,7 +39,7 @@ const ListEvents = () => {
         <div className='bg-background-v2 px-1 sm:px-6 py-6 lg:py-12 flex flex-col items-center gap-y-8 lg:gap-y-12 rounded-b-md'>
           <div className='flex flex-wrap justify-around gap-y-6'>
             {EventList.slice(0, 6).map((e, i) => {
-              return <EventCard key={i} {...e} urlLink='dashboard' />
+              return <EventCard key={i} event={e} urlLink='dashboard' />
             })}
           </div>
           <button

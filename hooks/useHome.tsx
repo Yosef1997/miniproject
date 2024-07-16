@@ -1,3 +1,4 @@
+"use client"
 import { ApiResponse } from "@/types/home"
 import { useEffect, useState } from "react"
 

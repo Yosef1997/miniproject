@@ -12,6 +12,7 @@ import useSignup from "@/hooks/useSignup"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ReloadIcon } from "@radix-ui/react-icons"
+import Error from "@/components/Error"
 
 const signupSchema = yup.object().shape({
   email: yup
@@ -47,11 +48,7 @@ const SignUp = () => {
   }
 
   if (error) {
-    return (
-      <div>
-        <p>Something error ...</p>
-      </div>
-    )
+    return <Error />
   }
 
   return (

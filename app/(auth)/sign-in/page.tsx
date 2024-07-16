@@ -11,6 +11,9 @@ import Link from "next/link"
 import useLogin from "@/hooks/useLogin"
 import { Button } from "@/components/ui/button"
 import { ReloadIcon } from "@radix-ui/react-icons"
+import { authenticate } from "@/actions/auth"
+import { signIn } from "next-auth/react"
+import Error from "@/components/Error"
 
 const signinSchema = yup.object().shape({
   email: yup
@@ -31,7 +34,7 @@ const SignIn = () => {
   const initialValues: signinValues = { email: "", password: "" }
 
   if (error) {
-    return <div>Something Error</div>
+    return <Error />
   }
 
   return (
@@ -52,7 +55,8 @@ const SignIn = () => {
           initialValues={initialValues}
           validationSchema={signinSchema}
           onSubmit={async (values) => {
-            await handleSignIn(values)
+            // await handleSignIn(values)
+            await authenticate(values)
           }}
         >
           {(props: FormikProps<signinValues>) => {

@@ -10,6 +10,7 @@ import { IoIosEyeOff } from "@react-icons/all-files/io/IoIosEyeOff"
 import useForgotPassword from "@/hooks/useForgotPassword"
 import { Button } from "@/components/ui/button"
 import { ReloadIcon } from "@radix-ui/react-icons"
+import Error from "@/components/Error"
 
 const forgotpasswordSchema = yup.object().shape({
   email: yup
@@ -40,7 +41,7 @@ const ForgotPassword = () => {
   }
 
   if (error) {
-    return <div>Something error...</div>
+    return <Error />
   }
 
   return (

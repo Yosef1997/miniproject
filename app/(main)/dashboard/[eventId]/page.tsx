@@ -14,7 +14,7 @@ export const generateMetadata = async ({
 }: Props): Promise<Metadata> => {
   const eventId = params.eventId
   return {
-    title: `${EventList[eventId].title}`,
+    title: `${EventList[eventId].eventName}`,
   }
 }
 

@@ -6,6 +6,7 @@ import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch"
 import { useDebouncedCallback } from "use-debounce"
 import EventCard from "@/components/EventCard"
 import useEvents from "@/hooks/useEvent"
+import Loading from "@/components/Loading"
 
 const Event = () => {
   const [search, setSearch] = useState<string>("")
@@ -104,7 +105,7 @@ const Event = () => {
         </div>
 
         <div className='bg-background px-1 sm:px-6 py-6 lg:py-12 flex flex-col items-center gap-y-8 lg:gap-y-12'>
-          {loading && <div>Loading...</div>}
+          {loading && <Loading />}
           {error && <div>{error.message}</div>}
           <div className='flex flex-wrap justify-around gap-y-6'>
             {data && data.data.content.length === 0 ? (
