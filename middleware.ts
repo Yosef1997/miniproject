@@ -47,3 +47,11 @@ export default auth((req) => {
     return NextResponse.redirect(newUrl)
   }
 })
+
+// export const config = {
+//   matcher: "/dashboard/:path*",
+// }
+
+export const config = {
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+}

@@ -4,12 +4,16 @@ import * as yup from "yup"
 import { Field, Form, Formik, FormikProps } from "formik"
 import Link from "next/link"
 import moment from "moment"
-import { Events } from "@/types/event"
+import { Events, Promotion, Ticket } from "@/types/event"
 import { EVENT_ORDER_KEY, ORDER_TICKETS } from "@/constant/constant"
 import TicketCard from "./_components/TicketCard"
 import { useSession } from "next-auth/react"
 import useProfile from "@/hooks/useProfile"
-import { Button } from "@/components/ui/button"
+import { AiFillDelete } from "@react-icons/all-files/ai/AiFillDelete"
+import { OrderRequest, TicketReq } from "@/types/order"
+import useCreateOrder from "@/hooks/useCreateOrder"
+import Loading from "@/components/Loading"
+import Error from "@/components/Error"
 
 const personalInfoSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
@@ -34,19 +38,63 @@ interface personalInfoValues {
 }
 
 const Order = () => {
-  const [ticketsPrice, setticketsPrice] = useState<number>(0)
-  const [ticketsQty, setticketsQty] = useState<number>(0)
+  const [ticketsPrice, setTicketsPrice] = useState<number>(0)
+  const [ticketsQty, setTicketsQty] = useState<number>(0)
+  const [ticketsPurchased, setTicketPurchased] = useState<TicketReq[]>([])
+  const [promotions, setPromotions] = useState<Promotion[]>([])
+  const [event, setEvent] = useState<Events | null>()
+  let [totalPayment, setTotalPayment] = useState<number>(0)
+  let [discountPrice, setDiscountPrice] = useState<number>(0)
   let [usePoint, setUsePoint] = useState<number>(0)
   let [isTicketConfirm, setIsTicketConfirm] = useState<boolean>(false)
-  const [event, setEvent] = useState<Events | null>()
+  const { handleCreateOrder, loading, error } = useCreateOrder()
   const session = useSession()
-
   const { response } = useProfile(session.data?.user.email)
-
   const initialValues: personalInfoValues = {
     fullName: session?.data?.user.username ?? "",
     email: session?.data?.user.email ?? "",
     phone: session?.data?.user.phone ?? "",
+  }
+
+  const handlePromotionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedPromotionId = e.target.value
+    const selectedPromotion = event?.promotions?.find(
+      (p) => p.id === Number(selectedPromotionId)
+    )
+
+    if (selectedPromotion) {
+      setPromotions((prevPromotions) => {
+        const exists = prevPromotions.some((p) => p.id === selectedPromotion.id)
+        if (exists) {
+          return prevPromotions
+        } else {
+          return [...prevPromotions, selectedPromotion]
+        }
+      })
+    }
+  }
+
+  const deletePromotion = (id: number) => {
+    setPromotions((prevPromotions) => prevPromotions.filter((p) => p.id !== id))
+  }
+
+  const handleOrder = async () => {
+    const req: OrderRequest = {
+      totalPrice: totalPayment,
+      totalTicket: ticketsQty,
+      usedPoint: usePoint,
+      userId: response?.id ?? 0,
+      organizerId: event?.userId ?? 0,
+      eventId: event?.id ?? 0,
+      tickets: ticketsPurchased,
+      promoIds: promotions.map((e) => {
+        return e.id
+      }),
+    }
+
+    await handleCreateOrder(req)
+
+    console.log("orderRequest >>>", req)
   }
 
   useEffect(() => {
@@ -60,16 +108,36 @@ const Order = () => {
     }
   }, [])
 
-  useCallback(() => {
+  useEffect(() => {
     const ticketOrder = sessionStorage.getItem(ORDER_TICKETS)
     if (ticketOrder !== null) {
       const data = JSON.parse(ticketOrder)
-      console.log(ORDER_TICKETS, data)
+      setTicketPurchased(data.tickets)
+      setTicketsPrice(data.ticketsPrice)
+      setTicketsQty(data.ticketsQty)
     }
   }, [isTicketConfirm])
 
+  useEffect(() => {
+    const totalDiscount = promotions.reduce(
+      (total, promo) => total + promo.discount,
+      0
+    )
+    const discountedPrice = ticketsPrice * (1 - totalDiscount / 100)
+    setDiscountPrice(discountedPrice)
+  }, [promotions])
+
+  useEffect(() => {
+    setTotalPayment(ticketsPrice - usePoint - discountPrice)
+  }, [ticketsPrice, usePoint, discountPrice])
+
+  if (error) {
+    return <Error />
+  }
+
   return (
     <div className='bg-background py-8 lg:py-14 px-6 md:px-16 xl:px-32 lg:grid lg:grid-cols-3 lg:gap-x-6'>
+      {loading && <Loading />}
       <div className='lg:col-span-2'>
         <h2 className='text-title font-semibold mb-6'>Choose Ticket</h2>
         <div className='bg-white px-3 lg:p-6 mb-12 rounded-md'>
@@ -77,7 +145,6 @@ const Order = () => {
           <button
             className='bg-primary text-white text-sm font-bold w-full py-2 lg:py-4 rounded-md my-4'
             type='button'
-            disabled={isTicketConfirm}
             onClick={() => setIsTicketConfirm(!isTicketConfirm)}
           >
             Confirm
@@ -120,25 +187,47 @@ const Order = () => {
           </div>
 
           {event?.promotions && (
-            <div className='flex flex-col md:flex-row justify-between md:items-center py-3 border-b border-border-line gap-y-3 md:gap-y-0'>
-              <p className='text-label text-sm'>Use voucher</p>
-              <div className='bg-background-v2 p-3 rounded-md w-full md:w-fit'>
-                <select
-                  name='use voucher'
-                  id='voucher'
-                  className='bg-background-v2 w-full'
-                >
-                  <option value=''>Select voucher</option>
-                  {event?.promotions?.map((e, i) => {
-                    return (
-                      <option
-                        key={i}
-                        value={e.discount / 100}
-                      >{`${e.type}:\n${e.name} - ${e.discount}%`}</option>
-                    )
-                  })}
-                </select>
+            <div className='border-b border-border-line'>
+              <div className='flex flex-col md:flex-row justify-between md:items-center py-3  gap-y-3 md:gap-y-0'>
+                <p className='text-label text-sm'>Use voucher</p>
+                <div className='bg-background-v2 p-3 rounded-md w-full md:w-fit'>
+                  <select
+                    name='use voucher'
+                    id='voucher'
+                    className='bg-background-v2 w-full'
+                    onChange={handlePromotionChange}
+                    value={""}
+                  >
+                    <option value=''>Select voucher</option>
+                    {event?.promotions?.map((e, i) => {
+                      return (
+                        <option
+                          key={i}
+                          value={e.id}
+                        >{`${e.type}:\n${e.name} - ${e.discount}%`}</option>
+                      )
+                    })}
+                  </select>
+                </div>
               </div>
+              {promotions.length > 0 && (
+                <p className='text-label text-sm mb-2'>Selected Voucher</p>
+              )}
+              {promotions.map((e, i) => {
+                return (
+                  <div
+                    key={i}
+                    className='bg-background-v2 w-full rounded-md flex justify-between items-center p-3 mb-2'
+                  >
+                    <p>{`${e.type} - ${e.discount}%`}</p>
+                    <AiFillDelete
+                      size={20}
+                      color='red'
+                      onClick={() => deletePromotion(e.id)}
+                    />
+                  </div>
+                )
+              })}
             </div>
           )}
 
@@ -157,12 +246,22 @@ const Order = () => {
               </select>
             </div>
           </div>
-          {/* <div className='flex justify-between items-center py-3'>
+          <div className='flex justify-between items-center py-3'>
+            <p className='text-label text-sm'>Original Price</p>
+            <p className='text-title'>IDR {ticketsPrice}</p>
+          </div>
+          <div className='flex justify-between items-center py-3'>
+            <p className='text-label text-sm'>Used Point</p>
+            <p className='text-title'>IDR {usePoint}</p>
+          </div>
+          <div className='flex justify-between items-center py-3'>
+            <p className='text-label text-sm'>Discount</p>
+            <p className='text-title'>IDR {discountPrice}</p>
+          </div>
+          <div className='flex justify-between items-center py-3'>
             <p className='text-label text-sm'>Total Payment</p>
-            <p className='text-title'>
-              IDR {totalOrder * events.price - usePoint}
-            </p>
-          </div> */}
+            <p className='text-title'>IDR {totalPayment}</p>
+          </div>
         </div>
       </div>
       <div className='mt-12 lg:mt-0'>
@@ -171,7 +270,7 @@ const Order = () => {
           initialValues={initialValues}
           validationSchema={personalInfoSchema}
           onSubmit={async (values) => {
-            console.log(values)
+            await handleOrder()
           }}
         >
           {(props: FormikProps<personalInfoValues>) => {

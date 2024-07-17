@@ -1,16 +1,12 @@
 import { ORDER_TICKETS } from "@/constant/constant"
 import { Ticket } from "@/types/event"
+import { TicketReq } from "@/types/order"
 import React, { useEffect, useState } from "react"
-
-interface OrderTicket {
-  ticketId: number
-  quantity: number
-}
 
 const TicketCard: React.FC<{ params: Ticket[] | [] }> = ({ params }) => {
   const [ticketsPrice, setTicketsPrice] = useState<number>(0)
   const [ticketsQty, setTicketsQty] = useState<number>(0)
-  const [tickets, setTickets] = useState<OrderTicket[]>([])
+  const [tickets, setTickets] = useState<TicketReq[]>([])
 
   const handleTicket = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -25,12 +21,10 @@ const TicketCard: React.FC<{ params: Ticket[] | [] }> = ({ params }) => {
         )
 
         if (existingTicketIndex !== -1) {
-          // Update existing ticket
           const updatedTickets = [...prevTickets]
           updatedTickets[existingTicketIndex] = { ticketId, quantity }
           return updatedTickets
         } else if (quantity > 0) {
-          // Add new ticket
           return [...prevTickets, { ticketId, quantity }]
         }
         return prevTickets

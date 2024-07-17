@@ -1,4 +1,3 @@
-import React from "react"
 import EventForm from "./_components/EventForm"
 import ListEvents from "./_components/ListEvents"
 
