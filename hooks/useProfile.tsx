@@ -1,8 +1,8 @@
 import { User } from "@/types/users"
 import { useEffect, useState } from "react"
 
-const useProfile = (email: string) => {
-  const [response, setResponse] = useState<User>()
+const useProfile = (email: string = "") => {
+  const [response, setResponse] = useState<User | undefined>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<unknown>(null)
 
@@ -11,15 +11,18 @@ const useProfile = (email: string) => {
       setLoading(true)
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_HOSTNAME_API}${process.env.NEXT_PUBLIC_PREFIX_API}/users/detail/${email}`
+          `${process.env.NEXT_PUBLIC_HOSTNAME_API}${process.env.NEXT_PUBLIC_PREFIX_API}/users/detail/${email}`,
+          {
+            credentials: "include",
+          }
         )
 
         if (!response.ok) {
           throw new Error("Failed to get detail event.")
         }
 
-        const result: User = await response.json()
-        setResponse(result)
+        const { data } = await response.json()
+        setResponse(data)
       } catch (error) {
         setError(error)
         console.log(error)
@@ -28,7 +31,7 @@ const useProfile = (email: string) => {
     }
 
     fetchProfile()
-  }, [])
+  }, [email])
 
   return { response, loading, error }
 }

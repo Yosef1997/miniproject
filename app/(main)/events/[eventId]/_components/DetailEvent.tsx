@@ -42,7 +42,7 @@ const DetailEvent: React.FC<{ eventId: number }> = ({ eventId }) => {
               <p className='text-body'>{response?.data.category}</p>
             </div>
             <Link
-              href={`/events/${response?.data.id}/order`}
+              href={`/order`}
               className='bg-primary rounded-md text-center mt-3 lg:mt-0 text-white-btn p-3 font-semibold w-full lg:w-fit'
               onClick={() => {
                 sessionStorage.setItem(

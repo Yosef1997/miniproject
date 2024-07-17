@@ -34,7 +34,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const data = await response.json()
 
           const cookieStore = cookies()
-          cookieStore.set("sid", data.data.token)
+          cookieStore.set("sid", data.data.token, {
+            maxAge: 24 * 60 * 60,
+          })
 
           console.log(data.data.user.avatar)
           return {
@@ -42,6 +44,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: data.data.user.email,
             role: data.data.user.role,
             avatar: data.data.user.avatar,
+            username: data.data.user.username,
+            phone: data.data.user.phone,
             token: data.data.token,
           }
         } catch (error) {
