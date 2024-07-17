@@ -70,7 +70,9 @@ export default function Home() {
           })}
         </div>
       </div>
-      <SubscribeForm />
+      <div className='pb-14'>
+        <SubscribeForm />
+      </div>
     </div>
   )
 }
