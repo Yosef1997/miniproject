@@ -1,17 +1,14 @@
 "use client"
-import React, { useContext, useEffect, useState } from "react"
-import EventList from "@/utils/MOCK_DATA"
+import React, { useEffect, useState } from "react"
 import * as yup from "yup"
 import { Field, Form, Formik, FormikProps } from "formik"
-import TickitzContext from "@/context/TickitzContext"
 import Link from "next/link"
 import moment from "moment"
-
-type Props = {
-  params: {
-    eventId: number
-  }
-}
+import { Events } from "@/types/event"
+import { EVENT_ORDER_KEY } from "@/constant/constant"
+import { auth } from "@/auth"
+import TicketCard from "./_components/TicketCard"
+import { useSession } from "next-auth/react"
 
 const personalInfoSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
@@ -31,67 +28,63 @@ interface personalInfoValues {
   phone: string
 }
 
-const Order: React.FC<Props> = ({ params }) => {
-  const [totalOrder, setTotalOrder] = useState<number>(1)
+const Order = () => {
+  const [totalOrder, setTotalOrder] = useState<number>(0)
   let [usePoint, setUsePoint] = useState<number>(0)
-  const events = EventList[params.eventId]
-  const { event, setEvent } = useContext(TickitzContext)
+  const [event, setEvent] = useState<Events | null>()
+  const session = useSession()
+  session.data?.user.email
+
   const initialValues: personalInfoValues = {
-    fullName: "Jonny Doe",
+    fullName: "",
     email: "",
     phone: "",
   }
 
   useEffect(() => {
-    const fetch = () => setEvent(EventList[params.eventId])
-    fetch()
+    const storedData = sessionStorage.getItem(EVENT_ORDER_KEY)
+    if (storedData !== null) {
+      const data = JSON.parse(storedData)
+      setEvent(data)
+    }
   }, [])
 
   return (
     <div className='bg-background py-8 lg:py-14 px-6 md:px-16 xl:px-32 lg:grid lg:grid-cols-3 lg:gap-x-6'>
       <div className='lg:col-span-2'>
+        <h2 className='text-title font-semibold mb-6'>Choose Ticket</h2>
+        <div className='bg-white px-3 lg:p-6 mb-12 rounded-md'>
+          {event?.tickets.map((e, i) => {
+            return <TicketCard key={i} params={e} />
+          })}
+        </div>
+
         <h2 className='text-title font-semibold mb-6'>Payment Info</h2>
         <div className='bg-white px-3 lg:p-6 rounded-md'>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <p className='text-label text-sm'>Date & time</p>
             <p className='text-title'>
-              {moment(new Date()).format("MMMM, DD - hh:mm A")}
+              {moment(event?.date).format("MMMM, DD - hh:mm A")}
             </p>
           </div>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <p className='text-label text-sm'>Event title</p>
             <p className='text-title line-clamp-2 w-1/2 text-end'>
-              {events.title}
+              {event?.eventName}
             </p>
           </div>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <p className='text-label text-sm'>Location</p>
-            <p className='text-title'>{events.location}</p>
+            <p className='text-title'>{event?.location}</p>
           </div>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <p className='text-label text-sm'>Venue</p>
-            <p className='text-title w-1/2 text-end'>{events.vanue}</p>
-          </div>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
-            <p className='text-label text-sm'>Price</p>
-            <p className='text-title'>IDR {events.price}</p>
-          </div>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
-            <div className='flex flex-col items-start'>
-              <p className='text-label text-sm'>Total order</p>
-              <p className='text-label text-sm'>(25 remaining)</p>
-            </div>
-            <input
-              onChange={(e) => setTotalOrder(Number(e.target.value))}
-              className='text-sm text-title text-center border border-border-line rounded-md w-[15vw] lg:w-[5vw] py-2 focus:outline-none'
-              type='number'
-              placeholder={`${totalOrder}`}
-            />
+            <p className='text-title w-1/2 text-end'>{event?.venue}</p>
           </div>
           <div className='flex justify-between items-center py-3 border-b border-border-line'>
             <div className='flex flex-col items-start'>
               <p className='text-label text-sm'>Use points</p>
-              <p className='text-label text-sm'>(10000)</p>
+              <p className='text-label text-sm'>{}</p>
             </div>
             <input
               onChange={(e) => {
@@ -100,27 +93,32 @@ const Order: React.FC<Props> = ({ params }) => {
               type='checkbox'
             />
           </div>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
+          <div className='flex flex-col md:flex-row justify-between md:items-center py-3 border-b border-border-line gap-y-3 md:gap-y-0'>
             <p className='text-label text-sm'>Use voucher</p>
-            <div className='bg-background-v2 p-3 rounded-md w-fit'>
+            <div className='bg-background-v2 p-3 rounded-md w-full md:w-fit'>
               <select
                 name='use voucher'
                 id='voucher'
-                className='bg-background-v2'
+                className='bg-background-v2 w-full'
               >
                 <option value=''>Select voucher</option>
-                <option value='Diskon 10%'>Diskon 10%</option>
-                <option value='Diskon 20%'>Diskon 20%</option>
+                {event?.promotions?.map((e, i) => {
+                  return (
+                    <option
+                      value={e.discount / 100}
+                    >{`${e.type}: ${e.name} - ${e.discount}%`}</option>
+                  )
+                })}
               </select>
             </div>
           </div>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
+          <div className='flex flex-col md:flex-row justify-between md:items-center py-3 border-b border-border-line gap-y-3 md:gap-y-0'>
             <p className='text-label text-sm'>Payment method</p>
-            <div className='bg-background-v2 p-3 rounded-md w-fit'>
+            <div className='bg-background-v2 p-3 rounded-md w-full md:w-fit'>
               <select
                 name='select payment'
                 id='payment'
-                className='bg-background-v2'
+                className='bg-background-v2  w-full'
               >
                 <option value=''>Select payment</option>
                 <option value='Virtual account'>Virtual account</option>
@@ -129,12 +127,12 @@ const Order: React.FC<Props> = ({ params }) => {
               </select>
             </div>
           </div>
-          <div className='flex justify-between items-center py-3'>
+          {/* <div className='flex justify-between items-center py-3'>
             <p className='text-label text-sm'>Total Payment</p>
             <p className='text-title'>
               IDR {totalOrder * events.price - usePoint}
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className='mt-12 lg:mt-0'>
