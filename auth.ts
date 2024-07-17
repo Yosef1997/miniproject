@@ -38,7 +38,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             maxAge: 24 * 60 * 60,
           })
 
-          console.log(data.data.user.avatar)
           return {
             id: data.data.user.id.toString(),
             email: data.data.user.email,

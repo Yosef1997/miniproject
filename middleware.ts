@@ -39,6 +39,7 @@ export default auth((req) => {
   }
 
   if (
+    req.auth &&
     req.auth?.user.role === "CUSTOMER" &&
     req.nextUrl.pathname.startsWith("/dashboard")
   ) {
