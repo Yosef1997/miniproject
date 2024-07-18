@@ -100,7 +100,10 @@ const Navbar = () => {
 
       <div className='flex lg:hidden items-center justify-between px-6 py-7 w-full'>
         <Image
-          onClick={() => router.push("/")}
+          onClick={() => {
+            router.push("/")
+            setShowBurger(false)
+          }}
           src={TickitzMobile}
           alt='tickitz-mobile'
         />
@@ -148,23 +151,13 @@ const Navbar = () => {
                     </div>
                   )
                 })}
-            {session.status === "unauthenticated" ? (
+            {session.status === "unauthenticated" && (
               <Link
                 className='flex text-title justify-center items-center py-4 border-b border-border-line'
                 href={"/sign-up"}
                 onClick={() => setShowBurger(false)}
               >
                 Sign Up
-              </Link>
-            ) : (
-              <Link
-                className='flex text-title justify-center items-center py-4 border-b border-border-line'
-                href={"/profile"}
-                onClick={() => {
-                  setShowBurger(false)
-                }}
-              >
-                Profile{" "}
               </Link>
             )}
 

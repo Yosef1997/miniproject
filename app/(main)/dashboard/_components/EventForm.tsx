@@ -3,6 +3,8 @@ import React from "react"
 import { Field, Form, Formik, FormikProps } from "formik"
 import * as yup from "yup"
 import UploadImage from "@/components/UploadImage"
+import useCategory from "@/hooks/useCategory"
+import { cities } from "@/utils/CityDummy"
 
 const dashboardSchema = yup.object().shape({
   name: yup.string().required("Event name is required"),
@@ -34,6 +36,7 @@ interface dashboardValues {
 }
 
 const EventForm: React.FC<{ isDetailEvent: boolean }> = ({ isDetailEvent }) => {
+  const { response } = useCategory()
   const initialValues: dashboardValues = {
     name: "",
     category: "",
@@ -59,7 +62,6 @@ const EventForm: React.FC<{ isDetailEvent: boolean }> = ({ isDetailEvent }) => {
         >
           {(props: FormikProps<dashboardValues>) => {
             const { values, errors, touched, handleChange } = props
-            console.log(props.values)
             return (
               <Form>
                 <div className='grid lg:grid-cols-3'>
@@ -94,6 +96,13 @@ const EventForm: React.FC<{ isDetailEvent: boolean }> = ({ isDetailEvent }) => {
                           value={values.category}
                         >
                           <option value=''>Select category</option>
+                          {response?.map((e, i) => {
+                            return (
+                              <option key={i} value={e.categoryName}>
+                                {e.categoryName}
+                              </option>
+                            )
+                          })}
                         </Field>
                       </div>
 
@@ -200,6 +209,13 @@ const EventForm: React.FC<{ isDetailEvent: boolean }> = ({ isDetailEvent }) => {
                         value={values.location}
                       >
                         <option value=''>Select location</option>
+                        {cities.map((e, i) => {
+                          return (
+                            <option key={i} value={e.city_name}>
+                              {e.city_name}
+                            </option>
+                          )
+                        })}
                       </Field>
                     </div>
                     {touched.location && errors.location ? (
