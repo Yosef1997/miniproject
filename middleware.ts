@@ -48,10 +48,6 @@ export default auth((req) => {
   }
 })
 
-// export const config = {
-//   matcher: "/dashboard/:path*",
-// }
-
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 }

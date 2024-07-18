@@ -1,3 +1,4 @@
+import { PROFILE_STORAGE } from "@/constant/constant"
 import { User } from "@/types/users"
 import { useEffect, useState } from "react"
 
@@ -22,6 +23,7 @@ const useProfile = (email: string = "") => {
         }
 
         const { data } = await response.json()
+        localStorage.setItem(PROFILE_STORAGE, JSON.stringify(data))
         setResponse(data)
       } catch (error) {
         setError(error)

@@ -1,8 +1,11 @@
 import { Field, Form, Formik, FormikProps } from "formik"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import * as yup from "yup"
 import { IoIosEye } from "@react-icons/all-files/io/IoIosEye"
 import { IoIosEyeOff } from "@react-icons/all-files/io/IoIosEyeOff"
+import useProfile from "@/hooks/useProfile"
+import { User } from "@/types/users"
+import { PROFILE_STORAGE } from "@/constant/constant"
 
 const detailAccountSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
@@ -43,11 +46,21 @@ interface detailAccountValues {
 const DetailAccount = () => {
   const [isShow, setIsShow] = useState(false)
   const [isShowConfirm, setIsShowConfirm] = useState(false)
+  const [data, setData] = useState<User>()
+
+  useEffect(() => {
+    const storage = localStorage.getItem(PROFILE_STORAGE)
+    if (storage !== null) {
+      const parsedData = JSON.parse(storage)
+      console.log("parsedData >>>", parsedData)
+      setData(parsedData)
+    }
+  }, [])
 
   const initialValues: detailAccountValues = {
-    fullName: "Jonny Doe",
-    email: "",
-    phone: "",
+    fullName: data?.username ?? "",
+    email: data?.email ?? "",
+    phone: data?.phone ?? "",
     password: "",
     confirmPassword: "",
   }
@@ -61,6 +74,7 @@ const DetailAccount = () => {
           onSubmit={async (values) => {
             console.log(values)
           }}
+          enableReinitialize={true}
         >
           {(props: FormikProps<detailAccountValues>) => {
             const { values, errors, touched, handleChange } = props

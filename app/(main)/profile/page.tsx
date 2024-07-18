@@ -3,9 +3,14 @@ import React, { useState } from "react"
 import DetailAccount from "./_components/DetailAccount"
 import OrderHistory from "./_components/OrderHistory"
 import ProfileImage from "./_components/ProfileImage"
+import { useSession } from "next-auth/react"
+import useProfile from "@/hooks/useProfile"
 
 const Profile = () => {
   const [tab, setTab] = useState<number>(1)
+  const session = useSession()
+  useProfile(session.data?.user.email)
+
   return (
     <div className='bg-background'>
       <div className='bg-white w-full flex justify-evenly text-sm lg:hidden'>
@@ -37,7 +42,7 @@ const Profile = () => {
 
       <div className='px-6 pt-8 pb-[72px] lg:px-[70px] lg:pt-14 lg:pb-24 lg:grid lg:grid-cols-3 lg:gap-x-8'>
         <div className='hidden lg:block'>
-          <ProfileImage name='Jhonny Doer' />
+          <ProfileImage />
         </div>
         <div className='lg:col-span-2'>
           <div className='bg-white w-full hidden justify-evenly text-sm rounded-md lg:flex'>
@@ -69,7 +74,7 @@ const Profile = () => {
           {tab === 1 ? (
             <>
               <div className='lg:hidden'>
-                <ProfileImage name='Jhonny Doer' />
+                <ProfileImage />
               </div>
               <div className='mt-12'>
                 <DetailAccount />

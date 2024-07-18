@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer"
 import Navbar from "@/components/Navbar"
+import { Toaster } from "@/components/ui/toaster"
 import React from "react"
 
 export default function MainLayout({
@@ -12,6 +13,7 @@ export default function MainLayout({
       <Navbar />
       {children}
       <Footer />
+      <Toaster />
     </div>
   )
 }
