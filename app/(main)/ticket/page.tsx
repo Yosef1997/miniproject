@@ -6,9 +6,11 @@ import TickitzWhite from "@/public/tickitz-white.svg"
 import { OrderData } from "@/types/order"
 import { TICKET_STORAGE } from "@/constant/constant"
 import moment from "moment"
+import { useRouter } from "next/navigation"
 
 const Ticket = () => {
   const [event, setEvent] = useState<OrderData>()
+  const router = useRouter()
 
   useEffect(() => {
     const storage = sessionStorage.getItem(TICKET_STORAGE)
@@ -92,6 +94,15 @@ const Ticket = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className='flex justify-center mt-10'>
+        <button
+          className='bg-primary text-white font-bold w-full lg:w-1/3 py-6 rounded-md'
+          type='button'
+          onClick={() => router.push("/")}
+        >
+          Back To Home
+        </button>
       </div>
     </div>
   )

@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/use-toast"
 import { ORDER_TICKETS } from "@/constant/constant"
 import { Ticket } from "@/types/event"
 import { TicketReq } from "@/types/order"
@@ -10,9 +11,16 @@ const TicketCard: React.FC<{ params: Ticket[] | [] }> = ({ params }) => {
 
   const handleTicket = (
     e: React.ChangeEvent<HTMLInputElement>,
-    ticketId: number
+    ticketId: number,
+    maxQty: number
   ) => {
     const quantity = Number(e.target.value)
+    if (quantity > maxQty) {
+      return toast({
+        variant: "destructive",
+        description: "Remaining seats quantity exceeded",
+      })
+    }
 
     if (quantity >= 0) {
       setTickets((prevTickets) => {
@@ -75,8 +83,7 @@ const TicketCard: React.FC<{ params: Ticket[] | [] }> = ({ params }) => {
               </p>
             </div>
             <input
-              // onChange={(e) => setTotalOrder(Number(e.target.value))}
-              onChange={(e) => handleTicket(e, params.id)}
+              onChange={(e) => handleTicket(e, params.id, params.seats)}
               className='text-sm text-title text-center border border-border-line rounded-md w-[15vw] lg:w-[5vw] py-2 focus:outline-none'
               type='number'
               placeholder='_'

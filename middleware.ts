@@ -20,21 +20,21 @@ export default auth((req) => {
     return NextResponse.redirect(newUrl)
   }
 
-  if (
-    req.auth &&
-    req.auth?.user.role === "ORGANIZER" &&
-    !req.nextUrl.pathname.startsWith("/dashboard")
-  ) {
-    const newUrl = new URL("/dashboard", req.nextUrl.origin)
-    return NextResponse.redirect(newUrl)
-  }
+  // if (
+  //   req.auth &&
+  //   req.auth?.user.role === "ORGANIZER" &&
+  //   !req.nextUrl.pathname.startsWith("/dashboard")
+  // ) {
+  //   const newUrl = new URL("/dashboard", req.nextUrl.origin)
+  //   return NextResponse.redirect(newUrl)
+  // }
 
   if (
     req.auth &&
     req.auth?.user.role === "ORGANIZER" &&
     req.nextUrl.pathname.startsWith("/order")
   ) {
-    const newUrl = new URL("/dashboard", req.nextUrl.origin)
+    const newUrl = new URL("/", req.nextUrl.origin)
     return NextResponse.redirect(newUrl)
   }
 

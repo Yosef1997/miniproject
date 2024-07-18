@@ -14,6 +14,7 @@ import { OrderRequest, TicketReq } from "@/types/order"
 import useCreateOrder from "@/hooks/useCreateOrder"
 import Loading from "@/components/Loading"
 import Error from "@/components/Error"
+import { toast } from "@/components/ui/use-toast"
 
 const personalInfoSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
@@ -43,6 +44,7 @@ const Order = () => {
   const [ticketsPurchased, setTicketPurchased] = useState<TicketReq[]>([])
   const [promotions, setPromotions] = useState<Promotion[]>([])
   const [event, setEvent] = useState<Events | null>()
+  const [paymentMethod, setPaymentMethod] = useState<string>("")
   let [totalPayment, setTotalPayment] = useState<number>(0)
   let [discountPrice, setDiscountPrice] = useState<number>(0)
   let [usePoint, setUsePoint] = useState<number>(0)
@@ -51,9 +53,14 @@ const Order = () => {
   const session = useSession()
   const { response } = useProfile(session.data?.user.email)
   const initialValues: personalInfoValues = {
-    fullName: session?.data?.user.username ?? "",
-    email: session?.data?.user.email ?? "",
-    phone: session?.data?.user.phone ?? "",
+    fullName: response?.username ?? "",
+    email: response?.email ?? "",
+    phone: response?.phone ?? "",
+  }
+
+  const handlePayment = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedPayment = e.target.value
+    setPaymentMethod(selectedPayment)
   }
 
   const handlePromotionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -79,6 +86,13 @@ const Order = () => {
   }
 
   const handleOrder = async () => {
+    if (paymentMethod === "") {
+      return toast({
+        variant: "destructive",
+        title: "Payment method requied",
+      })
+    }
+
     const req: OrderRequest = {
       totalPrice: totalPayment,
       totalTicket: ticketsQty,
@@ -93,8 +107,6 @@ const Order = () => {
     }
 
     await handleCreateOrder(req)
-
-    console.log("orderRequest >>>", req)
   }
 
   useEffect(() => {
@@ -136,216 +148,224 @@ const Order = () => {
   }
 
   return (
-    <div className='bg-background py-8 lg:py-14 px-6 md:px-16 xl:px-32 lg:grid lg:grid-cols-3 lg:gap-x-6'>
-      {loading && <Loading />}
-      <div className='lg:col-span-2'>
-        <h2 className='text-title font-semibold mb-6'>Choose Ticket</h2>
-        <div className='bg-white px-3 lg:p-6 mb-12 rounded-md'>
-          <TicketCard params={event?.tickets ?? []} />
-          <button
-            className='bg-primary text-white text-sm font-bold w-full py-2 lg:py-4 rounded-md my-4'
-            type='button'
-            onClick={() => setIsTicketConfirm(!isTicketConfirm)}
-          >
-            Confirm
-          </button>
-        </div>
-
-        <h2 className='text-title font-semibold mb-6'>Payment Info</h2>
-        <div className='bg-white px-3 lg:p-6 rounded-md'>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
-            <p className='text-label text-sm'>Date & time</p>
-            <p className='text-title'>
-              {moment(event?.date).format("MMMM, DD - hh:mm A")}
-            </p>
-          </div>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
-            <p className='text-label text-sm'>Event title</p>
-            <p className='text-title line-clamp-2 w-1/2 text-end'>
-              {event?.eventName}
-            </p>
-          </div>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
-            <p className='text-label text-sm'>Location</p>
-            <p className='text-title'>{event?.location}</p>
-          </div>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
-            <p className='text-label text-sm'>Venue</p>
-            <p className='text-title w-1/2 text-end'>{event?.venue}</p>
-          </div>
-          <div className='flex justify-between items-center py-3 border-b border-border-line'>
-            <div className='flex flex-col items-start'>
-              <p className='text-label text-sm'>Use points</p>
-              <p className='text-label text-sm'>{response?.point}</p>
+    <div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className='bg-background py-8 lg:py-14 px-6 md:px-16 xl:px-32 lg:grid lg:grid-cols-3 lg:gap-x-6'>
+          <div className='lg:col-span-2'>
+            <h2 className='text-title font-semibold mb-6'>Choose Ticket</h2>
+            <div className='bg-white px-3 lg:p-6 mb-12 rounded-md'>
+              <TicketCard params={event?.tickets ?? []} />
+              <button
+                className='bg-primary text-white text-sm font-bold w-full py-2 lg:py-4 rounded-md my-4'
+                type='button'
+                onClick={() => setIsTicketConfirm(!isTicketConfirm)}
+              >
+                Confirm
+              </button>
             </div>
-            <input
-              onChange={(e) => {
-                setUsePoint(e.target.checked ? response?.point ?? 0 : 0)
-              }}
-              type='checkbox'
-            />
-          </div>
 
-          {event?.promotions && (
-            <div className='border-b border-border-line'>
-              <div className='flex flex-col md:flex-row justify-between md:items-center py-3  gap-y-3 md:gap-y-0'>
-                <p className='text-label text-sm'>Use voucher</p>
+            <h2 className='text-title font-semibold mb-6'>Payment Info</h2>
+            <div className='bg-white px-3 lg:p-6 rounded-md'>
+              <div className='flex justify-between items-center py-3 border-b border-border-line'>
+                <p className='text-label text-sm'>Date & time</p>
+                <p className='text-title'>
+                  {moment(event?.date).format("MMMM, DD - hh:mm A")}
+                </p>
+              </div>
+              <div className='flex justify-between items-center py-3 border-b border-border-line'>
+                <p className='text-label text-sm'>Event title</p>
+                <p className='text-title line-clamp-2 w-1/2 text-end'>
+                  {event?.eventName}
+                </p>
+              </div>
+              <div className='flex justify-between items-center py-3 border-b border-border-line'>
+                <p className='text-label text-sm'>Location</p>
+                <p className='text-title'>{event?.location}</p>
+              </div>
+              <div className='flex justify-between items-center py-3 border-b border-border-line'>
+                <p className='text-label text-sm'>Venue</p>
+                <p className='text-title w-1/2 text-end'>{event?.venue}</p>
+              </div>
+              <div className='flex justify-between items-center py-3 border-b border-border-line'>
+                <div className='flex flex-col items-start'>
+                  <p className='text-label text-sm'>Use points</p>
+                  <p className='text-label text-sm'>{response?.point}</p>
+                </div>
+                <input
+                  onChange={(e) => {
+                    setUsePoint(e.target.checked ? response?.point ?? 0 : 0)
+                  }}
+                  type='checkbox'
+                />
+              </div>
+
+              {event?.promotions && (
+                <div className='border-b border-border-line'>
+                  <div className='flex flex-col md:flex-row justify-between md:items-center py-3  gap-y-3 md:gap-y-0'>
+                    <p className='text-label text-sm'>Use voucher</p>
+                    <div className='bg-background-v2 p-3 rounded-md w-full md:w-fit'>
+                      <select
+                        name='use voucher'
+                        id='voucher'
+                        className='bg-background-v2 w-full'
+                        onChange={handlePromotionChange}
+                        value={""}
+                      >
+                        <option value=''>Select voucher</option>
+                        {event?.promotions?.map((e, i) => {
+                          return (
+                            <option
+                              key={i}
+                              value={e.id}
+                            >{`${e.type}:\n${e.name} - ${e.discount}%`}</option>
+                          )
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                  {promotions.length > 0 && (
+                    <p className='text-label text-sm mb-2'>Selected Voucher</p>
+                  )}
+                  {promotions.map((e, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className='bg-background-v2 w-full rounded-md flex justify-between items-center p-3 mb-2'
+                      >
+                        <p>{`${e.type} - ${e.discount}%`}</p>
+                        <AiFillDelete
+                          size={20}
+                          color='red'
+                          onClick={() => deletePromotion(e.id)}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+
+              <div className='flex flex-col md:flex-row justify-between md:items-center py-3 border-b border-border-line gap-y-3 md:gap-y-0'>
+                <p className='text-label text-sm'>Payment method</p>
                 <div className='bg-background-v2 p-3 rounded-md w-full md:w-fit'>
                   <select
-                    name='use voucher'
-                    id='voucher'
-                    className='bg-background-v2 w-full'
-                    onChange={handlePromotionChange}
-                    value={""}
+                    name='select payment'
+                    id='payment'
+                    className='bg-background-v2  w-full'
+                    onChange={handlePayment}
                   >
-                    <option value=''>Select voucher</option>
-                    {event?.promotions?.map((e, i) => {
-                      return (
-                        <option
-                          key={i}
-                          value={e.id}
-                        >{`${e.type}:\n${e.name} - ${e.discount}%`}</option>
-                      )
-                    })}
+                    <option value=''>Select payment</option>
+                    <option value='Virtual account'>Virtual account</option>
+                    <option value='Transfer'>Transfer</option>
+                    <option value='COD'>COD</option>
                   </select>
                 </div>
               </div>
-              {promotions.length > 0 && (
-                <p className='text-label text-sm mb-2'>Selected Voucher</p>
-              )}
-              {promotions.map((e, i) => {
-                return (
-                  <div
-                    key={i}
-                    className='bg-background-v2 w-full rounded-md flex justify-between items-center p-3 mb-2'
-                  >
-                    <p>{`${e.type} - ${e.discount}%`}</p>
-                    <AiFillDelete
-                      size={20}
-                      color='red'
-                      onClick={() => deletePromotion(e.id)}
-                    />
-                  </div>
-                )
-              })}
+              <div className='flex justify-between items-center py-3'>
+                <p className='text-label text-sm'>Original Price</p>
+                <p className='text-title'>IDR {ticketsPrice}</p>
+              </div>
+              <div className='flex justify-between items-center py-3'>
+                <p className='text-label text-sm'>Used Point</p>
+                <p className='text-title'>IDR {usePoint}</p>
+              </div>
+              <div className='flex justify-between items-center py-3'>
+                <p className='text-label text-sm'>Discount</p>
+                <p className='text-title'>IDR {discountPrice}</p>
+              </div>
+              <div className='flex justify-between items-center py-3'>
+                <p className='text-label text-sm'>Total Payment</p>
+                <p className='text-title'>IDR {totalPayment}</p>
+              </div>
             </div>
-          )}
+          </div>
+          <div className='mt-12 lg:mt-0'>
+            <h2 className='text-title mb-6 font-semibold'>
+              Details Information
+            </h2>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={personalInfoSchema}
+              onSubmit={async (values) => {
+                await handleOrder()
+              }}
+              enableReinitialize={true}
+            >
+              {(props: FormikProps<personalInfoValues>) => {
+                const { values, errors, touched, handleChange } = props
 
-          <div className='flex flex-col md:flex-row justify-between md:items-center py-3 border-b border-border-line gap-y-3 md:gap-y-0'>
-            <p className='text-label text-sm'>Payment method</p>
-            <div className='bg-background-v2 p-3 rounded-md w-full md:w-fit'>
-              <select
-                name='select payment'
-                id='payment'
-                className='bg-background-v2  w-full'
-              >
-                <option value=''>Select payment</option>
-                <option value='Virtual account'>Virtual account</option>
-                <option value='Transfer'>Transfer</option>
-                <option value='COD'>COD</option>
-              </select>
-            </div>
-          </div>
-          <div className='flex justify-between items-center py-3'>
-            <p className='text-label text-sm'>Original Price</p>
-            <p className='text-title'>IDR {ticketsPrice}</p>
-          </div>
-          <div className='flex justify-between items-center py-3'>
-            <p className='text-label text-sm'>Used Point</p>
-            <p className='text-title'>IDR {usePoint}</p>
-          </div>
-          <div className='flex justify-between items-center py-3'>
-            <p className='text-label text-sm'>Discount</p>
-            <p className='text-title'>IDR {discountPrice}</p>
-          </div>
-          <div className='flex justify-between items-center py-3'>
-            <p className='text-label text-sm'>Total Payment</p>
-            <p className='text-title'>IDR {totalPayment}</p>
+                return (
+                  <Form>
+                    <div className='bg-white px-3 lg:px-6 py-6 mb-6 rounded-md'>
+                      <div className='flex flex-col mb-3'>
+                        <label htmlFor='fullName' className='text-body'>
+                          Full Name
+                        </label>
+                        <Field
+                          className='px-4 py-3 mt-3 text-body rounded-md border border-border-line focus:outline-none'
+                          type='text'
+                          name='fullName'
+                          onChange={handleChange}
+                          value={values.fullName}
+                          placeholder={"Fill your full name"}
+                        />
+                        {touched.fullName && errors.fullName ? (
+                          <div className='text-error text-sm mt-1'>
+                            {errors.fullName}
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className='flex flex-col mb-3'>
+                        <label htmlFor='email' className='text-body'>
+                          Email
+                        </label>
+                        <Field
+                          className='px-4 py-3 mt-3 text-body rounded-md border border-border-line focus:outline-none'
+                          type='email'
+                          name='email'
+                          onChange={handleChange}
+                          value={values.email}
+                          placeholder={values.email}
+                        />
+                        {touched.email && errors.email ? (
+                          <div className='text-error text-sm mt-1'>
+                            {errors.email}
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className='flex flex-col'>
+                        <label htmlFor='phone' className='text-body'>
+                          Phone Number
+                        </label>
+                        <Field
+                          className='px-4 py-3 mt-3 text-body rounded-md border border-border-line focus:outline-none'
+                          type='text'
+                          name='phone'
+                          onChange={handleChange}
+                          value={values.phone}
+                          placeholder={"Fill your phone"}
+                        />
+                        {touched.phone && errors.phone ? (
+                          <div className='text-error text-sm mt-1'>
+                            {errors.phone}
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                    <button
+                      className='bg-primary text-white text-sm font-bold w-full py-2 lg:py-4 rounded-md mb-4'
+                      type='submit'
+                    >
+                      Pay your order
+                    </button>
+                  </Form>
+                )
+              }}
+            </Formik>
           </div>
         </div>
-      </div>
-      <div className='mt-12 lg:mt-0'>
-        <h2 className='text-title mb-6 font-semibold'>Details Information</h2>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={personalInfoSchema}
-          onSubmit={async (values) => {
-            await handleOrder()
-          }}
-        >
-          {(props: FormikProps<personalInfoValues>) => {
-            const { values, errors, touched, handleChange } = props
-
-            return (
-              <Form>
-                <div className='bg-white px-3 lg:px-6 py-6 mb-6 rounded-md'>
-                  <div className='flex flex-col mb-3'>
-                    <label htmlFor='fullName' className='text-body'>
-                      Full Name
-                    </label>
-                    <Field
-                      className='px-4 py-3 mt-3 text-body rounded-md border border-border-line focus:outline-none'
-                      type='text'
-                      name='fullName'
-                      onChange={handleChange}
-                      value={values.fullName}
-                      placeholder={"Fill your full name"}
-                    />
-                    {touched.fullName && errors.fullName ? (
-                      <div className='text-error text-sm mt-1'>
-                        {errors.fullName}
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className='flex flex-col mb-3'>
-                    <label htmlFor='email' className='text-body'>
-                      Email
-                    </label>
-                    <Field
-                      className='px-4 py-3 mt-3 text-body rounded-md border border-border-line focus:outline-none'
-                      type='email'
-                      name='email'
-                      onChange={handleChange}
-                      value={values.email}
-                      placeholder={values.email}
-                    />
-                    {touched.email && errors.email ? (
-                      <div className='text-error text-sm mt-1'>
-                        {errors.email}
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className='flex flex-col'>
-                    <label htmlFor='phone' className='text-body'>
-                      Phone Number
-                    </label>
-                    <Field
-                      className='px-4 py-3 mt-3 text-body rounded-md border border-border-line focus:outline-none'
-                      type='text'
-                      name='phone'
-                      onChange={handleChange}
-                      value={values.phone}
-                      placeholder={"Fill your phone"}
-                    />
-                    {touched.phone && errors.phone ? (
-                      <div className='text-error text-sm mt-1'>
-                        {errors.phone}
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-                <button
-                  className='bg-primary text-white text-sm font-bold w-full py-2 lg:py-4 rounded-md mb-4'
-                  type='submit'
-                >
-                  Pay your order
-                </button>
-                <Link href={"/ticket"}>next</Link>
-              </Form>
-            )
-          }}
-        </Formik>
-      </div>
+      )}
     </div>
   )
 }

@@ -7,9 +7,11 @@ import useHome from "@/hooks/useHome"
 import SubscribeForm from "@/components/SubscribeForm"
 import Loading from "@/components/Loading"
 import Error from "@/components/Error"
+import { useRouter } from "next/navigation"
 
 export default function Home() {
   const { response, loading, error } = useHome()
+  const router = useRouter()
 
   if (error) {
     return <Error />
@@ -31,6 +33,7 @@ export default function Home() {
             type='button'
             title='Explore Events'
             className='bg-primary text-white-btn font-semibold p-2 lg:py-3 lg:px-8 rounded-md w-fit'
+            onClick={() => router.push("/events")}
           >
             Explore Events
           </button>
