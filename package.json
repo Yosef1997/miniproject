@@ -17,6 +17,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@react-icons/all-files": "^4.1.0",
+    "@syncfusion/ej2-react-barcode-generator": "^26.1.42",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "formik": "^2.4.6",

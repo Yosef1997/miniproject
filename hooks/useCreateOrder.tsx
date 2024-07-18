@@ -1,5 +1,6 @@
 "use client"
 import { toast } from "@/components/ui/use-toast"
+import { TICKET_STORAGE } from "@/constant/constant"
 import { OrderRequest, OrderResponse } from "@/types/order"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -30,6 +31,7 @@ const useCreateOrder = () => {
       }
 
       const result: OrderResponse = await response.json()
+      sessionStorage.setItem(TICKET_STORAGE, JSON.stringify(result.data))
       setResponse(result)
       router.push("/ticket")
       toast({

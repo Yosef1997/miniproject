@@ -68,7 +68,7 @@ interface OrderTicket {
   quantity: number
 }
 
-interface OrderData {
+export interface OrderData {
   id: number
   totalPrice: number
   totalTicket: number
