@@ -6,6 +6,7 @@ import React, { ChangeEvent, useState } from "react"
 import Error from "./Error"
 import { ImageData } from "@/types/uploadImage"
 import Loading from "./Loading"
+import { UPLOAD_IMAGE_STORAGE } from "@/constant/constant"
 
 const UploadImage = () => {
   const [imageUrl, setImageUrl] = useState<string>("")
@@ -28,6 +29,7 @@ const UploadImage = () => {
       if (result) {
         setImageUrl(result.url)
         setPublicId(result.publicId)
+        sessionStorage.setItem(UPLOAD_IMAGE_STORAGE, JSON.stringify(result))
       }
     } catch (err) {
       console.error("Error uploading or updating image:", err)
