@@ -43,6 +43,7 @@ const Event = () => {
       refetch({ page: (data.data.pageable.pageNumber || 0) + 1 }, true)
     }
   }
+
   return (
     <div>
       <div className='relative'>

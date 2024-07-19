@@ -33,7 +33,7 @@ const useProfile = (email: string = "") => {
     }
 
     fetchProfile()
-  }, [email])
+  }, [])
 
   return { response, loading, error }
 }

@@ -9,9 +9,9 @@ import { AiFillDelete } from "@react-icons/all-files/ai/AiFillDelete"
 import { toast } from "@/components/ui/use-toast"
 import useCreateEvent from "@/hooks/useCreateEvent"
 import { CreateEventReq } from "@/types/createEvent"
-import { useSession } from "next-auth/react"
 import { PROFILE_STORAGE, UPLOAD_IMAGE_STORAGE } from "@/constant/constant"
 import { parse, formatISO, set } from "date-fns"
+import useDetailEvent from "@/hooks/useDetailEvent"
 
 const dashboardSchema = yup.object().shape({
   name: yup.string().required("Event name is required"),
@@ -110,9 +110,9 @@ const EventForm: React.FC<{ isDetailEvent: boolean }> = ({ isDetailEvent }) => {
     if (profile !== null) {
       const data = JSON.parse(profile)
       setUserId(data.id)
+      console.log(data.id)
     }
   }, [])
-  console.log(userId)
 
   return (
     <div>
@@ -261,7 +261,7 @@ const EventForm: React.FC<{ isDetailEvent: boolean }> = ({ isDetailEvent }) => {
                 })
               }
               const newTicket: CreateTicket = {
-                name: values.ticket,
+                name: "Free",
                 seats: values.availableTickets,
                 price: 0,
               }

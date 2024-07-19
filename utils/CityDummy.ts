@@ -160,14 +160,6 @@ export const cities = [
     postal_code: "14550",
   },
   {
-    city_id: "190",
-    province_id: "31",
-    province: "Sulawesi Utara",
-    type: "Kabupaten",
-    city_name: "Kepulauan Siau Tagulandang Biaro (Sitaro)",
-    postal_code: "95862",
-  },
-  {
     city_id: "191",
     province_id: "20",
     province: "Maluku Utara",
@@ -182,14 +174,6 @@ export const cities = [
     type: "Kabupaten",
     city_name: "Kepulauan Talaud",
     postal_code: "95885",
-  },
-  {
-    city_id: "193",
-    province_id: "24",
-    province: "Papua",
-    type: "Kabupaten",
-    city_name: "Kepulauan Yapen (Yapen Waropen)",
-    postal_code: "98211",
   },
   {
     city_id: "194",
