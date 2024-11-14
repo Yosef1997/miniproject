@@ -1,45 +1,52 @@
 "use client"
-import { BiImageAdd } from "react-icons/bi"
+import useUploadImage from "@/hooks/useUploadImage"
+import { BiImageAdd } from "@react-icons/all-files/bi/BiImageAdd"
 import Image from "next/image"
 import React, { ChangeEvent, useState } from "react"
+import Error from "./Error"
+import { ImageData } from "@/types/uploadImage"
+import Loading from "./Loading"
+import { UPLOAD_IMAGE_STORAGE } from "@/constant/constant"
 
 const UploadImage = () => {
   const [imageUrl, setImageUrl] = useState<string>("")
+  const [publicId, setPublicId] = useState<string>("")
+  const [loading, setLoading] = useState(false)
+  const { handleUpload, handleUpdate, error } = useUploadImage()
 
   const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
-
-    const formData = new FormData()
-    formData.append("file", file)
-    formData.append(
-      "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string
-    )
-
+    setLoading(true)
     try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error("Failed to upload image")
+      let result: ImageData | undefined
+      if (publicId !== "") {
+        result = await handleUpdate(publicId, file)
+      } else {
+        result = await handleUpload(file)
       }
 
-      const data = await response.json()
-      setImageUrl(data.secure_url)
-    } catch (error) {
-      console.error("Error uploading image:", error)
+      if (result) {
+        setImageUrl(result.url)
+        setPublicId(result.publicId)
+        sessionStorage.setItem(UPLOAD_IMAGE_STORAGE, JSON.stringify(result))
+      }
+    } catch (err) {
+      console.error("Error uploading or updating image:", err)
     }
+    setLoading(false)
   }
+
+  if (error) {
+    return <Error />
+  }
+
   return (
     <div className='relative border border-border-line rounded-md p-9 w-fit'>
       <div className='flex flex-col justify-center items-center w-[177px] h-[272px]'>
-        {imageUrl ? (
+        {loading ? (
+          <Loading />
+        ) : imageUrl ? (
           <Image
             src={imageUrl}
             alt={imageUrl}

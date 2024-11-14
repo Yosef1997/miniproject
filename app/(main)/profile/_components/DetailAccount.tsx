@@ -1,8 +1,13 @@
 import { Field, Form, Formik, FormikProps } from "formik"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import * as yup from "yup"
-import { IoIosEye } from "react-icons/io"
-import { IoIosEyeOff } from "react-icons/io"
+import { IoIosEye } from "@react-icons/all-files/io/IoIosEye"
+import { IoIosEyeOff } from "@react-icons/all-files/io/IoIosEyeOff"
+import useProfile from "@/hooks/useProfile"
+import { User } from "@/types/users"
+import { PROFILE_STORAGE } from "@/constant/constant"
+import useUpdateProfile, { UpdateProfileReq } from "@/hooks/useUpdateProfile"
+import { toast } from "@/components/ui/use-toast"
 
 const detailAccountSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
@@ -43,14 +48,43 @@ interface detailAccountValues {
 const DetailAccount = () => {
   const [isShow, setIsShow] = useState(false)
   const [isShowConfirm, setIsShowConfirm] = useState(false)
+  const [data, setData] = useState<User>()
+  const { handleUpdateProfile, response, loading } = useUpdateProfile()
+
+  useEffect(() => {
+    const storage = localStorage.getItem(PROFILE_STORAGE)
+    if (storage !== null) {
+      const parsedData = JSON.parse(storage)
+      setData(parsedData)
+    }
+  }, [response])
 
   const initialValues: detailAccountValues = {
-    fullName: "Jonny Doe",
-    email: "",
-    phone: "",
+    fullName: data?.username ?? "",
+    email: data?.email ?? "",
+    phone: data?.phone ?? "",
     password: "",
     confirmPassword: "",
   }
+
+  const handleUpdate = async () => {
+    if (initialValues.password !== initialValues.confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Change password failed",
+      })
+    }
+    if (initialValues.password === "" && initialValues.confirmPassword === "") {
+      const req: UpdateProfileReq = {
+        username: initialValues.fullName,
+        email: initialValues.email,
+        password: initialValues.password,
+        phone: initialValues.phone,
+      }
+      handleUpdateProfile(req)
+    }
+  }
+
   return (
     <div>
       <h2 className='font-semibold text-lg lg:hidden'>Account Settings</h2>
@@ -58,13 +92,11 @@ const DetailAccount = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={detailAccountSchema}
-          onSubmit={async (values) => {
-            console.log(values)
-          }}
+          onSubmit={async (values) => {}}
+          enableReinitialize={true}
         >
           {(props: FormikProps<detailAccountValues>) => {
             const { values, errors, touched, handleChange } = props
-            console.log(props.values)
             return (
               <Form>
                 <h2 className='w-full pt-2 border-b border-border-line text-title mb-10 py-2'>

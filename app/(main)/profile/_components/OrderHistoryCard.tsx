@@ -1,4 +1,4 @@
-import { BiChevronRight } from "react-icons/bi"
+import { BiChevronRight } from "@react-icons/all-files/bi/BiChevronRight"
 import Image from "next/image"
 import React from "react"
 import Spark from "@/public/spark.svg"

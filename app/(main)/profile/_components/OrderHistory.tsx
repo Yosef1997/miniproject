@@ -1,5 +1,5 @@
-import { BiChevronLeft } from "react-icons/bi"
-import { BiChevronRight } from "react-icons/bi"
+import { BiChevronLeft } from "@react-icons/all-files/bi/BiChevronLeft"
+import { BiChevronRight } from "@react-icons/all-files/bi/BiChevronRight"
 import React, { useState } from "react"
 import OrderHistoryCard from "./OrderHistoryCard"
 

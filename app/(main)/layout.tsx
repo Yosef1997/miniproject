@@ -1,7 +1,9 @@
-import { Footer, Navbar } from "@/components"
+import Footer from "@/components/Footer"
+import Navbar from "@/components/Navbar"
+import { Toaster } from "@/components/ui/toaster"
 import React from "react"
 
-export default function mainLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -11,6 +13,7 @@ export default function mainLayout({
       <Navbar />
       {children}
       <Footer />
+      <Toaster />
     </div>
   )
 }

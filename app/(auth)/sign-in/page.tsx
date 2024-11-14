@@ -5,23 +5,22 @@ import TickitzWhite from "@/public/tickitz-white.svg"
 import Image from "next/image"
 import { Field, Form, Formik, FormikProps } from "formik"
 import * as yup from "yup"
-import { IoIosEye } from "react-icons/io"
-import { IoIosEyeOff } from "react-icons/io"
+import { IoIosEye } from "@react-icons/all-files/io/IoIosEye"
+import { IoIosEyeOff } from "@react-icons/all-files/io/IoIosEyeOff"
 import Link from "next/link"
+import useLogin from "@/hooks/useLogin"
+import { Button } from "@/components/ui/button"
+import { ReloadIcon } from "@radix-ui/react-icons"
+import { authenticate } from "@/actions/auth"
+import { signIn } from "next-auth/react"
+import Error from "@/components/Error"
 
 const signinSchema = yup.object().shape({
   email: yup
     .string()
     .email("Invalid email address format")
     .required("Email is required"),
-  password: yup
-    .string()
-    .min(8, "Password must be 8 characters at minimum")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
-    )
-    .required("Password is required"),
+  password: yup.string().required("Password is required"),
 })
 
 interface signinValues {
@@ -29,9 +28,14 @@ interface signinValues {
   password: string
 }
 
-const page = () => {
+const SignIn = () => {
   const [isShow, setIsShow] = useState(false)
+  const { handleSignIn, loading, error } = useLogin()
   const initialValues: signinValues = { email: "", password: "" }
+
+  if (error) {
+    return <Error />
+  }
 
   return (
     <div className='lg:grid lg:grid-cols-3 min-h-screen'>
@@ -51,12 +55,12 @@ const page = () => {
           initialValues={initialValues}
           validationSchema={signinSchema}
           onSubmit={async (values) => {
-            console.log(values)
+            // await handleSignIn(values)
+            await authenticate(values)
           }}
         >
           {(props: FormikProps<signinValues>) => {
             const { values, errors, touched, handleChange } = props
-            console.log(props.values)
             return (
               <Form>
                 <div className='flex flex-col mb-6'>
@@ -100,12 +104,19 @@ const page = () => {
                     </div>
                   ) : null}
                 </div>
-                <button
-                  className='bg-primary text-white font-bold w-full py-6 rounded-md'
-                  type='submit'
-                >
-                  Sign In
-                </button>
+                {loading ? (
+                  <Button disabled>
+                    <ReloadIcon className='mr-2 h-4 w-4 animate-spin' />
+                    Please wait
+                  </Button>
+                ) : (
+                  <button
+                    className='bg-primary text-white font-bold w-full py-6 rounded-md'
+                    type='submit'
+                  >
+                    Sign In
+                  </button>
+                )}
               </Form>
             )
           }}
@@ -123,4 +134,4 @@ const page = () => {
   )
 }
 
-export default page
+export default SignIn

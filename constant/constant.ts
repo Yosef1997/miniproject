@@ -1,0 +1,5 @@
+export const EVENT_ORDER_KEY = "event_order"
+export const ORDER_TICKETS = "order_tickets"
+export const PROFILE_STORAGE = "profile_storage"
+export const TICKET_STORAGE = "ticket_storage"
+export const UPLOAD_IMAGE_STORAGE = "upload_image_storage"
